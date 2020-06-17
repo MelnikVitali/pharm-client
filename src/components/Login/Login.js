@@ -1,106 +1,156 @@
-import React from 'react'
-import { makeStyles } from '@material-ui/core/styles'
-import Button from '@material-ui/core/Button'
-import Box from '@material-ui/core/Box'
-import CircularProgress from '@material-ui/core/CircularProgress'
-import Typography from '@material-ui/core/Typography'
-import TextField from '@material-ui/core/TextField'
-import Paper from '@material-ui/core/Paper'
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
-const useStyles = makeStyles(theme => ({
-    layout: {
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import TextField from '@material-ui/core/TextField';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import Grid from '@material-ui/core/Grid';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
+
+import { loginUser } from '../../store/actions/authActions';
+import { clearErrors } from '../../store/actions/errorActions';
+
+
+const useStyles = makeStyles((theme) => ({
+    paper: {
+        marginTop: theme.spacing(8),
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center'
+        alignItems: 'center',
     },
-    paper: {
-        padding: theme.spacing(2),
-        [theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {
-            marginTop: theme.spacing(8),
-            padding: `${theme.spacing(6)}px ${theme.spacing(4)}px`
-        }
-    },
-    submit: {
-        margin: theme.spacing(3, 0, 3)
+    avatar: {
+        margin: theme.spacing(1),
+        backgroundColor: theme.palette.secondary.main,
     },
     form: {
         width: '100%', // Fix IE 11 issue.
-        marginTop: theme.spacing(1)
+        marginTop: theme.spacing(1),
     },
-    buttonProgress: {
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        marginTop: -12,
-        marginLeft: -12
-    }
-}))
+    submit: {
+        margin: theme.spacing(3, 0, 2),
+    },
+}));
 
-const LoginForm = () => {
-    const classes = useStyles({})
-    const [formData, setFormData] = React.useState({ email: '', password: '' })
-    const [submitting, setSubmitting] = React.useState(false)
+const Login = ({ history }) => {
+    const classes = useStyles();
+
+    const dispatch = useDispatch();
+
+    const errors = useSelector(store => store.errorReducer);
+    const user = useSelector(store =>  store.authReducer.user);
+
+    const [ fields, setFields ] = useState({
+        email: '',
+        password: ''
+    });
+
+    useEffect(() => {
+        dispatch(clearErrors());
+
+        if (user) {
+            history.push('/');
+        }
+
+    }, [ dispatch, user, history ]);
+
+    const onChange = e => {
+        setFields({
+                ...fields,
+                [e.target.name]: e.target.value
+            }
+        );
+    };
+
+    const onSubmit = event => {
+        event.preventDefault();
+
+        dispatch(loginUser(fields));
+    };
 
     return (
-        <main className={classes.layout}>
-            <Paper className={classes.paper} elevation={2}>
-                <Box
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    flexDirection="column"
-                >
-                    <Typography component="h1" variant="h4" gutterBottom>
-                        Login
-                    </Typography>
-                    <Typography component="p" gutterBottom>
-                        Log in to your account dashboard
-                    </Typography>
-                </Box>
-                <form method="post" className={classes.form} noValidate>
+        <Container component="main" maxWidth="xs">
+            <CssBaseline />
+            <div className={classes.paper}>
+                <Avatar className={classes.avatar}>
+                    <LockOutlinedIcon />
+                </Avatar>
+                <Typography component="h1" variant="h5">
+                    Sign in
+                </Typography>
+                <form className={classes.form} noValidate onSubmit={onSubmit}>
+
                     <TextField
+                        variant="outlined"
                         margin="normal"
                         required
                         fullWidth
                         id="email"
-                        label="Email Address"
+                        label={errors.email ?
+                            <span className="text-danger">{errors.email}</span>
+                            : "Email Address"}
                         name="email"
                         autoComplete="email"
                         autoFocus
-                        defaultValue={formData.email}
-                        onChange={e => setFormData({ ...formData, email: e.target.value })}
+                        value={fields.email}
+                        onChange={onChange}
                     />
+
                     <TextField
+                        variant="outlined"
                         margin="normal"
                         required
                         fullWidth
                         name="password"
-                        label="Password"
+                        label={errors.password ?
+                            <span className="text-danger">{errors.password}</span>
+                            : "Password"}
                         type="password"
                         id="password"
                         autoComplete="current-password"
-                        defaultValue={formData.password}
-                        onChange={e => setFormData({ ...formData, password: e.target.value })}
+                        value={fields.password}
+                        onChange={onChange}
                     />
-                    <Box mb={6}>
-                        <Button
-                            disabled={submitting}
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            className={classes.submit}
-                        >
-                            {submitting && (
-                                <CircularProgress size={24} className={classes.buttonProgress} />
-                            )}
-                            {submitting ? 'Signing in...' : 'Sign In'}
-                        </Button>
-                    </Box>
-                </form>
-            </Paper>
-        </main>
-    )
-}
 
-export default LoginForm;
+                    <FormControlLabel
+                        control={<Checkbox value="remember" color="primary" />}
+                        label="Remember me"
+                    />
+
+                    {errors.limit && (<div className="text-danger">{errors.limit}</div>)}
+
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        className={classes.submit}
+                    >
+                        Sign In
+                    </Button>
+                    <Grid container>
+                        <Grid item xs>
+                            <Link to='/' variant="body2">
+                                Forgot password?
+                            </Link>
+                        </Grid>
+                        <Grid item>
+                            <Link to='/register' variant="body2">
+                                {"Don't have an account? Sign Up"}
+                            </Link>
+                        </Grid>
+                    </Grid>
+                </form>
+            </div>
+
+        </Container>
+    );
+};
+
+export default Login;

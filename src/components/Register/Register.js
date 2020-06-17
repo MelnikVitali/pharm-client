@@ -1,147 +1,176 @@
-import React from 'react'
-import Typography from '@material-ui/core/Typography'
-import Box from '@material-ui/core/Box'
-import { makeStyles } from '@material-ui/core/styles'
-import Paper from '@material-ui/core/Paper'
-import TextField from '@material-ui/core/TextField'
-import Button from '@material-ui/core/Button'
-import { server } from '../utils'
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
-const useStyles = makeStyles(theme => ({
-    layout: {
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import TextField from '@material-ui/core/TextField';
+import Grid from '@material-ui/core/Grid';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
+
+import { clearErrors } from '../../store/actions/errorActions';
+import { registerUser } from '../../store/actions/authActions';
+
+const useStyles = makeStyles((theme) => ({
+    paper: {
+        marginTop: theme.spacing(8),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        maxWidth: '768px',
-        margin: '0 auto'
     },
-    paper: {
-        padding: theme.spacing(2),
-        [theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {
-            marginTop: theme.spacing(8),
-            padding: `${theme.spacing(6)}px ${theme.spacing(4)}px`
-        }
-    },
-    submit: {
-        margin: theme.spacing(3, 0, 2)
+    avatar: {
+        margin: theme.spacing(1),
+        backgroundColor: theme.palette.secondary.main,
     },
     form: {
         width: '100%', // Fix IE 11 issue.
-        marginTop: theme.spacing(1)
+        marginTop: theme.spacing(3),
     },
-    buttonProgress: {
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        marginTop: -12,
-        marginLeft: -12
-    }
-}))
+    submit: {
+        margin: theme.spacing(3, 0, 2),
+    },
+}));
 
-const Register = () => {
-    const classes = useStyles({})
-    const [formData, setFormData] = React.useState({
-        firstName: '',
-        lastName: '',
+const Register = ({ history }) => {
+    const classes = useStyles();
+
+    const dispatch = useDispatch();
+
+    const errors = useSelector(store => store.errorReducer);
+    const user = useSelector(store => store.authReducer.user);
+
+    const [ fields, setFields ] = useState({
+        name: '',
         email: '',
-        password: ''
-    })
-    const [submitting, setSubmitting] = React.useState(false)
+        password: '',
+        password2: ''
+    });
 
-    const handleSubmit = async e => {
-        e.preventDefault()
-        const { firstName, lastName, email, password } = formData
-        const { success, data } = await server.postAsync('/auth/register', {
-            firstName,
-            lastName,
-            email,
-            password
-        })
-        if (success) {
-            window.location.replace(data)
-            return
+    useEffect(() => {
+        dispatch(clearErrors());
+
+        if (user) {
+            history.push('/');
         }
-    }
+
+    }, [ dispatch, user, history ]);
+
+    const onChange = e => {
+        setFields({
+                ...fields,
+                [e.target.name]: e.target.value
+            }
+        );
+    };
+
+    const onSubmit = event => {
+        event.preventDefault();
+
+        dispatch(registerUser(fields));
+    };
 
     return (
-        <main className={classes.layout}>
-            <Paper className={classes.paper} elevation={2}>
-                <Box
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    flexDirection="column"
-                >
-                    <Typography component="h1" variant="h4" gutterBottom>
-                        Register
-                    </Typography>
-                </Box>
-                <form method="post" className={classes.form} noValidate onSubmit={handleSubmit}>
-                    <TextField
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="firstName"
-                        label="First Name"
-                        name="firstName"
-                        autoComplete="fname"
-                        autoFocus
-                        defaultValue={formData.firstName}
-                        onChange={e => setFormData({ ...formData, firstName: e.target.value })}
-                    />
-                    <TextField
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="lastName"
-                        label="Last Name"
-                        name="lastName"
-                        autoComplete="lname"
-                        defaultValue={formData.lastName}
-                        onChange={e => setFormData({ ...formData, lastName: e.target.value })}
-                    />
-                    <TextField
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="email"
-                        label="Email Address"
-                        name="email"
-                        autoComplete="email"
-                        defaultValue={formData.email}
-                        onChange={e => setFormData({ ...formData, email: e.target.value })}
-                    />
-                    <TextField
-                        margin="normal"
-                        required
-                        fullWidth
-                        name="password"
-                        label="Password"
-                        type="password"
-                        id="password"
-                        autoComplete="new-password"
-                        defaultValue={formData.password}
-                        onChange={e => setFormData({ ...formData, password: e.target.value })}
-                    />
-                    <Box mb={6}>
-                        <Button
-                            disabled={submitting}
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            className={classes.submit}
-                        >
-                            {submitting && (
-                                <CircularProgress size={24} className={classes.buttonProgress} />
-                            )}
-                            {submitting ? 'Registering...' : 'Register'}
-                        </Button>
-                    </Box>
-                </form>
-            </Paper>
-        </main>
-    )
-}
+        <Container component="main" maxWidth="xs">
+            <CssBaseline />
+            <div className={classes.paper}>
+                <Avatar className={classes.avatar}>
+                    <LockOutlinedIcon />
+                </Avatar>
+                <Typography component="h1" variant="h5">
+                    Sign up
+                </Typography>
+                <form className={classes.form} noValidate onSubmit={onSubmit}>
 
-export default Register
+                    <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            <TextField
+                                variant="outlined"
+                                required
+                                fullWidth
+                                id="name"
+                                label={errors.name ?
+                                    <span className="text-danger">{errors.name}</span>
+                                    : "Name"}
+                                name="name"
+                                autoComplete="name"
+                                value={fields.name}
+                                onChange={onChange}
+
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                variant="outlined"
+                                required
+                                fullWidth
+                                id="email"
+                                label={errors.email ?
+                                    <span className="text-danger">{errors.email}</span>
+                                    : "Email Address"}
+                                name="email"
+                                autoComplete="email"
+                                value={fields.email}
+                                onChange={onChange}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                variant="outlined"
+                                required
+                                fullWidth
+                                name="password"
+                                label={errors.password ?
+                                    <span className="text-danger">{errors.password}</span>
+                                    : "Password"}
+                                type="password"
+                                id="password"
+                                autoComplete="current-password"
+                                value={fields.password}
+                                onChange={onChange}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                variant="outlined"
+                                required
+                                fullWidth
+                                name="password2"
+                                label={errors.password2 ?
+                                    <span className="text-danger">{errors.password2}</span>
+                                    : "Confirm password"}
+                                type="password"
+                                id="confirmPassword"
+                                autoComplete="new-password"
+                                value={fields.password2}
+                                onChange={onChange}
+                            />
+                        </Grid>
+
+                    </Grid>
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        className={classes.submit}
+                    >
+                        Sign Up
+                    </Button>
+                    <Grid container justify="flex-end">
+                        <Grid item>
+                            <Link to="/login" variant="body2">
+                                Already have an account? Sign in
+                            </Link>
+                        </Grid>
+                    </Grid>
+                </form>
+            </div>
+        </Container>
+    );
+};
+
+export default Register;
