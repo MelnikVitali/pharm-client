@@ -1,8 +1,10 @@
-import STORAGE from './storage';
-
 import axios from 'axios';
+import js_cookie from 'js-cookie';
 
-const getTokenStorage = STORAGE.getItem('token');
+import STORAGE from './storage';
+import { history } from './history';
+
+const getTokenStorage = STORAGE.getItem('accessToken');
 let isAlreadyFetchingAccessToken = false;
 let subscribers = [];
 
@@ -15,8 +17,10 @@ export function setAuthBearerToken(token) {
 }
 
 export function isTokenExpiredError() {
-    const accessTokenExpires = getTokenStorage && STORAGE.jwtDecode(getTokenStorage.access_token);
+    const accessTokenExpires = getTokenStorage && STORAGE.jwtDecode(getTokenStorage);
+
     const getTime = new Date().getTime() / 1000;
+
     return accessTokenExpires.exp <= getTime;
 }
 
@@ -32,42 +36,44 @@ function addSubscriber(callback) {
 export async function resetTokenAndReattemptRequest(error) {
     try {
         const { response: errorResponse } = error;
-        const resetToken = getTokenStorage.refresh_token;
+        const resetToken = js_cookie.get('refreshToken');
+
+        console.log('resetTokenAndReattemptRequest');
+
         if (!resetToken) {
+            history.push('/logout');
+
             return Promise.reject(error);
         }
 
         const retryOriginalRequest = new Promise((resolve) => {
             addSubscriber((accessToken) => {
                 errorResponse.config.headers.Authorization = `Bearer ${accessToken}`;
+
                 resolve(axios(errorResponse.config));
             });
         });
 
         if (!isAlreadyFetchingAccessToken) {
             isAlreadyFetchingAccessToken = true;
-            const response = await axios({
+
+            await axios({
                 method: 'post',
-                url: `/refresh-tokens`,
-                data: {
-                    refresh_token: resetToken,
-                },
-            });
+                url: `/refresh-tokens`
+            }).then(res => {
+                const newToken = res.data.accessToken;
+                setAuthBearerToken(newToken);
 
-            if (!response.data) {
+                onAccessTokenFetched(newToken);
+                STORAGE.setItem('accessToken', newToken);
+
+                isAlreadyFetchingAccessToken = false;
+            }).catch(error => {
+                history.push('/logout');
+
                 return Promise.reject(error);
-            }
-
-            const newToken = response.data.access_token;
-            setAuthBearerToken(newToken);
-            onAccessTokenFetched(newToken);
-            STORAGE.setItem('token', {
-                accessToken: newToken,
-                refreshToken: response.data.refreshToken,
             });
-            isAlreadyFetchingAccessToken = false;
         }
-
         return retryOriginalRequest;
     } catch (err) {
         return Promise.reject(err);

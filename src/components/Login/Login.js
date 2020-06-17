@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import {useDispatch} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -13,7 +13,9 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+
 import { loginUser } from '../../store/actions/authActions';
+import { clearErrors } from '../../store/actions/errorActions';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -36,16 +38,27 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Login = (props) => {
-    console.log(props);
+const Login = ({ history }) => {
     const classes = useStyles();
 
     const dispatch = useDispatch();
+
+    const errors = useSelector(store => store.errorReducer);
+    const user = useSelector(store =>  store.authReducer.user);
 
     const [ fields, setFields ] = useState({
         email: '',
         password: ''
     });
+
+    useEffect(() => {
+        dispatch(clearErrors());
+
+        if (user) {
+            history.push('/');
+        }
+
+    }, [ dispatch, user, history ]);
 
     const onChange = e => {
         setFields({
@@ -55,13 +68,11 @@ const Login = (props) => {
         );
     };
 
-    const onSubmit = e => {
-        e.preventDefault();
-        console.log(fields);
+    const onSubmit = event => {
+        event.preventDefault();
 
         dispatch(loginUser(fields));
     };
-
 
     return (
         <Container component="main" maxWidth="xs">
@@ -73,37 +84,47 @@ const Login = (props) => {
                 <Typography component="h1" variant="h5">
                     Sign in
                 </Typography>
-                <form className={classes.form} noValidate onSubmit={ onSubmit }>
+                <form className={classes.form} noValidate onSubmit={onSubmit}>
+
                     <TextField
                         variant="outlined"
                         margin="normal"
                         required
                         fullWidth
                         id="email"
-                        label="Email Address"
+                        label={errors.email ?
+                            <span className="text-danger">{errors.email}</span>
+                            : "Email Address"}
                         name="email"
                         autoComplete="email"
                         autoFocus
                         value={fields.email}
-                        onChange={ onChange }
+                        onChange={onChange}
                     />
+
                     <TextField
                         variant="outlined"
                         margin="normal"
                         required
                         fullWidth
                         name="password"
-                        label="Password"
+                        label={errors.password ?
+                            <span className="text-danger">{errors.password}</span>
+                            : "Password"}
                         type="password"
                         id="password"
                         autoComplete="current-password"
                         value={fields.password}
-                        onChange={ onChange }
+                        onChange={onChange}
                     />
+
                     <FormControlLabel
                         control={<Checkbox value="remember" color="primary" />}
                         label="Remember me"
                     />
+
+                    {errors.limit && (<div className="text-danger">{errors.limit}</div>)}
+
                     <Button
                         type="submit"
                         fullWidth
@@ -120,7 +141,7 @@ const Login = (props) => {
                             </Link>
                         </Grid>
                         <Grid item>
-                            <Link to='/registration' variant="body2">
+                            <Link to='/register' variant="body2">
                                 {"Don't have an account? Sign Up"}
                             </Link>
                         </Grid>
@@ -129,33 +150,6 @@ const Login = (props) => {
             </div>
 
         </Container>
-        // <div className='row'>
-        //     <form className="card p-3 mx-auto col-md-6">
-        //         <h2>Вход</h2>
-        //
-        //         <div className="form-group">
-        //             <label htmlFor="email">Email</label>
-        //             <input
-        //                 type="email"
-        //                 className="form-control"
-        //                 value={fields.email}
-        //                 name="email"
-        //             />
-        //         </div>
-        //
-        //         <div className="form-group">
-        //             <label htmlFor="password">Пароль</label>
-        //             <input
-        //                 type="password"
-        //                 className="form-control"
-        //                 value={fields.password}
-        //                 name="password"
-        //             />
-        //         </div>
-        //
-        //     </form>
-        //
-        // </div>
     );
 };
 
