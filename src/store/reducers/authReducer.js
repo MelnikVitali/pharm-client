@@ -1,8 +1,8 @@
 import *as actions from '../actions/types';
 
 const initialState = {
-    user: null
-}
+    user: null,
+};
 
 export default (state = initialState, action) => {
     switch (action.type) {

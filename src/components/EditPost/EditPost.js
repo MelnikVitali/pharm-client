@@ -1,39 +1,48 @@
 import React, { useEffect, useRef } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Helmet from "react-helmet";
+
+import {
+    Button, Typography, TextField
+} from '@material-ui/core';
+
 
 import { editPost, getPost } from '../../store/actions/postActions';
 
-import { Spinner } from '../Spinner/Spinner';
+import Spinner from '../Spinner';
 
-const mapStateToProps = state => ({
-    post: state.postReducer.post
-});
+import useStyles from './styles';
+import Navbar from '../Navbar';
+import Container from '@material-ui/core/Container';
+import Preloader from '../Preloader';
 
-export const EditPost = connect(mapStateToProps, { editPost, getPost })(props => {
-    const { getPost, editPost, history, post, match } = props;
+const EditPost = props => {
+    const classes = useStyles();
 
+    const dispatch = useDispatch();
+    const post = useSelector(store => store.postReducer.post);
+
+    const isFetching = useSelector(store => store.toggleIsFetchingReducer.isFetching);
+
+    const { history } = props;
+    const id = props.match.params.id;
 
     const titleInput = useRef(null);
     const textInput = useRef(null);
 
     useEffect(() => {
-        const id = match.params.id;
-
-        getPost(id);
-    }, [ getPost, match.params.id ]);
+        dispatch(getPost(id));
+    }, [ dispatch, id ]);
 
     const onSubmit = e => {
         e.preventDefault();
 
-        const id = match.params.id;
-
-        editPost(id,
+        dispatch(editPost(id,
             {
                 title: titleInput.current.value,
                 text: textInput.current.value,
             },
-            history);
+            history));
     };
 
     if (!post) {
@@ -41,35 +50,60 @@ export const EditPost = connect(mapStateToProps, { editPost, getPost })(props =>
     }
 
     return (
-        <form onSubmit={ onSubmit }>
-            <Helmet>
-                <title>Редактирование статьи</title>
-            </Helmet>
+        <>
+            {isFetching ? <Preloader /> : null}
+            <Navbar />
+            <Container component='main' maxWidth='md' className={classes.root}>
+                <Helmet>
+                    <title>Редактирование статьи</title>
+                </Helmet>
 
-            <div className='form-group'>
-                <label htmlFor="title">Заголовок</label>
-                <input
-                    ref={ titleInput }
-                    type="text"
-                    defaultValue={ post.title }
-                    className="form-control"
-                />
-            </div>
+                <Typography variant="h4" align='center'>
+                    Редактирование статьи
+                </Typography>
 
-            <div className='form-group'>
-                <label htmlFor="text">Содержание</label>
-                <input
-                    ref={ textInput }
-                    type="text"
-                    defaultValue={ post.text }
-                    className="form-control"
-                />
-            </div>
+                <form className={classes.form} noValidate onSubmit={onSubmit}>
 
-            <button type='submit' className='btn btn-primary '>Редактировать</button>
-        </form>
+                    <TextField
+                        variant="outlined"
+                        required
+                        fullWidth
+                        className={classes.margin}
+                        id="title"
+                        label={"Заголовок"}
+                        name="title"
+                        autoComplete="title"
+                        inputRef={titleInput}
+                        defaultValue={post.title}
+                    />
+
+                    <TextField
+                        variant="outlined"
+                        required
+                        fullWidth
+                        className={classes.margin}
+                        id="text"
+                        label={"Текст статьи"}
+                        name="text"
+                        type="text"
+                        inputRef={textInput}
+                        defaultValue={post.text}
+                        autoComplete="text"
+
+                    />
+
+                    <Button
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                        className={classes.submit}
+                    >
+                        Редактировать
+                    </Button>
+                </form>
+            </Container>
+        </>
     );
-});
+};
 
-
-
+export default EditPost;

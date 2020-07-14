@@ -6,9 +6,20 @@ import { setAuthBearerToken } from '../../helpers/authorization';
 
 import * as actions from './types';
 
+import { history } from '../../helpers/history';
+
+import { APIUrls } from '../../configs/APIUrls';
+
+import { toggleIsFetching } from './toggleIsFetchingActions';
+
 export const loginUser = (loginData) => async dispatch => {
     try {
-        const res = await axios.post("/login", loginData);
+        await dispatch(toggleIsFetching(true));
+
+        const res = await axios.post(APIUrls.login, loginData);
+
+        await dispatch(toggleIsFetching(false));
+
         const accessToken = res.data.accessToken;
 
         await STORAGE.setItem('accessToken', accessToken);
@@ -19,7 +30,56 @@ export const loginUser = (loginData) => async dispatch => {
         dispatch(setCurrentUser(decoded));
 
     } catch (err) {
-        console.log('ERR', err);
+       await dispatch(toggleIsFetching(false));
+
+        dispatch({
+            type: actions.ERROR,
+            payload: err.response.data
+        });
+    }
+};
+
+export const forgotPassword = (forgotData) => async dispatch => {
+    try {
+        await dispatch(toggleIsFetching(true));
+
+        const res = await axios.put(APIUrls.forgotPassword, forgotData);
+
+        if (res) {
+            dispatch(toggleIsFetching(false));
+        }
+
+        dispatch({
+            type: actions.SUCCESS,
+            payload: res.data
+        });
+
+    } catch (err) {
+        await dispatch(toggleIsFetching(false));
+
+        dispatch({
+            type: actions.ERROR,
+            payload: err.response.data
+        });
+    }
+};
+
+export const resetPassword = (resetData) => async dispatch => {
+    try {
+        await dispatch(toggleIsFetching(true));
+
+        const res = await axios.put(APIUrls.resetPassword, resetData);
+
+            await dispatch(toggleIsFetching(false));
+
+        dispatch({
+            type: actions.SUCCESS,
+            payload: res.data
+        });
+
+    } catch (err) {
+       await dispatch(toggleIsFetching(false));
+
         dispatch({
             type: actions.ERROR,
             payload: err.response.data
@@ -29,16 +89,44 @@ export const loginUser = (loginData) => async dispatch => {
 
 export const registerUser = registerData => async dispatch => {
     try {
-        const res = await axios.post('/register', registerData);
+        await dispatch(toggleIsFetching(true));
 
-        const accessToken = res.data.accessToken;
+        const res = await axios.post(APIUrls.register, registerData);
 
-        await STORAGE.setItem('accessToken', accessToken);
 
-        await setAuthBearerToken(accessToken);
+          await  dispatch(toggleIsFetching(false));
 
-        dispatch({ type: actions.SET_CURRENT_USER, payload: res.data.user });
+        dispatch({
+            type: actions.SUCCESS,
+            payload: res.data
+        });
     } catch (err) {
+        await dispatch(toggleIsFetching(false));
+
+        dispatch({
+            type: actions.ERROR,
+            payload: err.response.data
+        });
+    }
+};
+
+export const confirmEmail = (tokenData) => async dispatch => {
+    try {
+        dispatch(toggleIsFetching(true));
+
+        const res = await axios.post(APIUrls.emailActivation, tokenData);
+
+        if (res) {
+            dispatch(toggleIsFetching(false));
+        }
+
+        dispatch({
+            type: actions.SUCCESS,
+            payload: res.data
+        });
+    } catch (err) {
+        dispatch(toggleIsFetching(false));
+
         dispatch({
             type: actions.ERROR,
             payload: err.response.data
@@ -47,13 +135,15 @@ export const registerUser = registerData => async dispatch => {
 };
 
 export const logoutUser = () => async dispatch => {
-       await STORAGE.removeItem('accessToken');
+    await STORAGE.removeItem('accessToken');
 
-        await js_cookie.remove('refreshToken');
+    await js_cookie.remove('refreshToken');
 
-        await setAuthBearerToken(null);
+    await setAuthBearerToken(null);
 
-        dispatch(setCurrentUser(null));
+    await history.push(APIUrls.login);
+
+    dispatch(setCurrentUser(null));
 };
 
 export const setCurrentUser = decoded => {

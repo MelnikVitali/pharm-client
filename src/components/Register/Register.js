@@ -1,175 +1,252 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import IconButton from '@material-ui/core/IconButton';
 
 import { clearErrors } from '../../store/actions/errorActions';
 import { registerUser } from '../../store/actions/authActions';
 
-const useStyles = makeStyles((theme) => ({
-    paper: {
-        marginTop: theme.spacing(8),
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
-    avatar: {
-        margin: theme.spacing(1),
-        backgroundColor: theme.palette.secondary.main,
-    },
-    form: {
-        width: '100%', // Fix IE 11 issue.
-        marginTop: theme.spacing(3),
-    },
-    submit: {
-        margin: theme.spacing(3, 0, 2),
-    },
-}));
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
-const Register = ({ history }) => {
+import { APIUrls } from '../../configs/APIUrls';
+
+import useStyles from './style';
+import { clearSuccess } from '../../store/actions/successActions';
+import Preloader from '../Preloader';
+import Navbar from '../Navbar';
+import { Alert } from '@material-ui/lab';
+
+const Register = () => {
     const classes = useStyles();
 
     const dispatch = useDispatch();
 
-    const errors = useSelector(store => store.errorReducer);
-    const user = useSelector(store => store.authReducer.user);
-
-    const [ fields, setFields ] = useState({
-        name: '',
-        email: '',
-        password: '',
-        password2: ''
-    });
+    const errorsServer = useSelector(store => store.errorReducer);
+    const successServer = useSelector(store => store.successReducer);
+    const isFetching = useSelector(store => store.toggleIsFetchingReducer.isFetching);
 
     useEffect(() => {
         dispatch(clearErrors());
+        dispatch(clearSuccess());
+    }, [ dispatch ]);
 
-        if (user) {
-            history.push('/');
-        }
+    const {
+        handleSubmit, handleChange,
+        values, errors, isValid,
+        touched, handleBlur, setValues
+    } = useFormik({
+        initialValues: {
+            name: '',
+            email: '',
+            password: '',
+            confirmPassword: '',
+            showPassword: false,
+            showConfirmPassword: false
+        },
+        validationSchema: Yup.object({
+            name: Yup.string()
+                .required('Укажите имя'),
+            email: Yup.string()
+                .email('Укажите правильный email')
+                .required('Укажите email'),
+            password: Yup.string()
+                .min(6, 'Пароль должен состоять не менее чем из 6 символов')
+                .required('Укажите пароль'),
+            confirmPassword: Yup.string()
+                .oneOf([ Yup.ref('password'), null ], 'Пароли не совпадают')
+                .required('Повторите пароль')
+        }),
+        onSubmit: fields => dispatch(registerUser(fields))
+    });
 
-    }, [ dispatch, user, history ]);
-
-    const onChange = e => {
-        setFields({
-                ...fields,
-                [e.target.name]: e.target.value
-            }
-        );
+     const onFocus = () => {
+        dispatch(clearErrors());
+        dispatch(clearSuccess());
     };
 
-    const onSubmit = event => {
-        event.preventDefault();
+    const handleClickShowPassword = () => {
+        setValues({ ...values, showPassword: !values.showPassword });
+        console.log(values.showPassword);
+    };
 
-        dispatch(registerUser(fields));
+    const handleClickShowConfirmPassword = () => {
+        setValues({ ...values, showConfirmPassword: !values.showConfirmPassword });
+    };
+
+    const handleMouseDownPassword = (event) => {
+        event.preventDefault();
     };
 
     return (
-        <Container component="main" maxWidth="xs">
-            <CssBaseline />
-            <div className={classes.paper}>
-                <Avatar className={classes.avatar}>
-                    <LockOutlinedIcon />
-                </Avatar>
-                <Typography component="h1" variant="h5">
-                    Sign up
-                </Typography>
-                <form className={classes.form} noValidate onSubmit={onSubmit}>
+        <>
+            {isFetching ? <Preloader /> : null}
 
-                    <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            <TextField
-                                variant="outlined"
-                                required
-                                fullWidth
-                                id="name"
-                                label={errors.name ?
-                                    <span className="text-danger">{errors.name}</span>
-                                    : "Name"}
-                                name="name"
-                                autoComplete="name"
-                                value={fields.name}
-                                onChange={onChange}
+            <Navbar />
+            <Container component="main" maxWidth="xs">
 
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                variant="outlined"
-                                required
-                                fullWidth
-                                id="email"
-                                label={errors.email ?
-                                    <span className="text-danger">{errors.email}</span>
-                                    : "Email Address"}
-                                name="email"
-                                autoComplete="email"
-                                value={fields.email}
-                                onChange={onChange}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                variant="outlined"
-                                required
-                                fullWidth
-                                name="password"
-                                label={errors.password ?
-                                    <span className="text-danger">{errors.password}</span>
-                                    : "Password"}
-                                type="password"
-                                id="password"
-                                autoComplete="current-password"
-                                value={fields.password}
-                                onChange={onChange}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                variant="outlined"
-                                required
-                                fullWidth
-                                name="password2"
-                                label={errors.password2 ?
-                                    <span className="text-danger">{errors.password2}</span>
-                                    : "Confirm password"}
-                                type="password"
-                                id="confirmPassword"
-                                autoComplete="new-password"
-                                value={fields.password2}
-                                onChange={onChange}
-                            />
-                        </Grid>
+                <div className={classes.paper}>
 
-                    </Grid>
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        className={classes.submit}
-                    >
-                        Sign Up
-                    </Button>
-                    <Grid container justify="flex-end">
-                        <Grid item>
-                            <Link to="/login" variant="body2">
+                    <Avatar className={classes.avatar}>
+                        <LockOutlinedIcon />
+                    </Avatar>
+
+                    <Typography component="h1" variant="h5">
+                        Sign up
+                    </Typography>
+
+                    <form className={classes.form} noValidate onSubmit={handleSubmit}>
+
+                        <TextField
+                            error={touched.name && (Boolean(errors.name) || Boolean(errorsServer.name))}
+                            variant="outlined"
+                            required
+                            fullWidth
+                            id="name"
+                            label={errors.name || errorsServer.name ? "Error Name" : "Name"}
+                            helperText={(touched.name && (errors.name || errorsServer.name))
+                                ? (errors.name || errorsServer.name)
+                                : ''}
+                            name="name"
+                            autoComplete="name"
+                            value={values.name}
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            onFocus={onFocus}
+                        />
+
+                        <TextField
+                            error={touched.email && (Boolean(errors.email) || Boolean(errorsServer.email))}
+                            variant="outlined"
+                            margin="normal"
+                            required
+                            fullWidth
+                            id="email"
+                            label="Email Address"
+                            helperText={(touched.email && (errors.email || errorsServer.email))
+                                ? (errors.email || errorsServer.email)
+                                : ''}
+                            name="email"
+                            autoComplete="email"
+                            value={values.email || ''}
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            onFocus={onFocus}
+                        />
+
+                        <TextField
+                            error={touched.password && (Boolean(errors.password) || Boolean(errorsServer.password))}
+                            variant="outlined"
+                            margin="normal"
+                            required
+                            fullWidth
+                            name="password"
+                            label="Password"
+                            helperText={(touched.password && (errors.password || errorsServer.password))
+                                ? (errors.password || errorsServer.password)
+                                : ''}
+                            type={values.showPassword ? 'text' : 'password'}
+                            id="password"
+                            autoComplete="current-password"
+                            value={values.password || ''}
+                            onBlur={handleBlur}
+                            onFocus={onFocus}
+                            onChange={handleChange}
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            aria-label="toggle password visibility"
+                                            onClick={handleClickShowPassword}
+                                            onMouseDown={handleMouseDownPassword}
+                                            edge="end"
+                                        >
+                                            {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                )
+                            }}
+                        />
+
+                        <TextField
+                            error={touched.confirmPassword &&
+                            (Boolean(errors.confirmPassword) ||
+                                Boolean(errorsServer.confirmPassword))}
+                            variant="outlined"
+                            margin="normal"
+                            required
+                            fullWidth
+                            name="confirmPassword"
+                            label="Confirm password"
+                            helperText={(touched.confirmPassword &&
+                                (errors.confirmPassword || errorsServer.confirmPassword))
+                                ? (errors.confirmPassword || errorsServer.confirmPassword)
+                                : ''}
+                            type={values.showConfirmPassword ? 'text' : 'password'}
+                            id="confirmPassword"
+                            autoComplete="confirmPassword"
+                            value={values.confirmPassword || ''}
+                            onBlur={handleBlur}
+                            onFocus={onFocus}
+                            onChange={handleChange}
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            aria-label="toggle password visibility"
+                                            onClick={handleClickShowConfirmPassword}
+                                            onMouseDown={handleMouseDownPassword}
+                                            edge="end"
+                                        >
+                                            {values.showConfirmPassword ? <Visibility /> : <VisibilityOff />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                )
+                            }}
+                        />
+
+                        {errorsServer.error
+                            ? <Alert severity="error">{errorsServer.error}</Alert>
+                            : null}
+                        {successServer.message
+                            ? <Alert severity="success">{successServer.message}</Alert>
+                            : null}
+
+                        <Button
+                            disabled={!isValid}
+                            type="submit"
+                            variant="contained"
+                            fullWidth
+                            color="primary"
+                            className={classes.submit}
+                        >
+                            Sign Up
+                        </Button>
+                        <Grid container justify="flex-end">
+                            <Grid
+                                component={Link}
+                                to={APIUrls.login}
+                                variant="body2"
+                                item
+                            >
                                 Already have an account? Sign in
-                            </Link>
+                            </Grid>
                         </Grid>
-                    </Grid>
-                </form>
-            </div>
-        </Container>
+                    </form>
+                </div>
+            </Container>
+        </>
     );
 };
 

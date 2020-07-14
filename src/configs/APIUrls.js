@@ -1,3 +1,17 @@
 export const APIUrls = {
-    baseURL: 'http://localhost:3000'
+    baseURL: 'http://localhost:3000',
+    register: '/register',
+    login: '/login',
+    logout: '/logout',
+    fileUpload: '/file-upload',
+    homePage: '/',
+    addPost: '/add',
+    editPost: '/edit',
+    post: '/post',
+    posts: '/posts',
+    learnMaterialUI: '/learn',
+    refreshTokens: '/refresh-tokens',
+    forgotPassword: '/forgot-password',
+    resetPassword: '/reset-password',
+    emailActivation: '/email-activation',
 };

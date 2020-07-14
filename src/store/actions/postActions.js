@@ -1,46 +1,40 @@
 import axios from 'axios';
 import * as actions from './types';
 
+import { APIUrls } from '../../configs/APIUrls';
+
 export const getPosts = () => async dispatch => {
-    const res = await axios.get('/posts');
+    const res = await axios.get(APIUrls.posts);
+
     dispatch({ type: actions.GET_POSTS, posts: res.data });
 };
 
 export const getPost = (id) => async dispatch => {
-    const res = await axios.get(`/posts/${ id }`);
+    const res = await axios.get(`${APIUrls.posts}/${id}`);
 
     dispatch({ type: actions.GET_POST, post: res.data });
 };
 
 export const addPost = (post, history) => async dispatch => {
-    await axios.post('/posts', post);
+    await axios.post(APIUrls.posts, post);
+
     dispatch({ type: actions.ADD_POST });
-    history.push('/');
+
+    history.push(APIUrls.homePage);
 };
 
 export const editPost = (id, post, history) => async dispatch => {
-    await axios.put(`/posts/${ id }`, post);
+    await axios.put(`${APIUrls.posts}/${id}`, post);
+
     dispatch({ type: actions.EDIT_POST });
-    history.push(`/post/${ id }`);
+
+    history.push(`${APIUrls.post}/${id}`);
 };
 
 export const deletePost = (id, history) => async dispatch => {
-    await axios.delete(`/posts/${ id }`);
+    await axios.delete(`${APIUrls.posts}/${id}`);
+
     dispatch({ type: actions.DELETE_POST });
-    history.replace('/');
+
+    history.replace(APIUrls.homePage);
 };
-
-export const addComment = (id, comment) => async dispatch => {
-    const res = await axios.post(`/posts/comment/${ id }`, comment);
-
-    console.log(res.data);
-    dispatch({ type: actions.ADD_COMMENT , post: res.data});
-};
-
-export const deleteComment = (id) => async dispatch => {
-    const res = await axios.delete(`/posts/comment/${ id }`);
-    dispatch({ type: actions.DELETE_COMMENT , post: res.data});
-};
-
-
-

@@ -1,37 +1,48 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Helmet from 'react-helmet';
 
-import { Spinner} from '../Spinner/Spinner';
-import { Post } from '../Post/Post';
+import Container from '@material-ui/core/Container';
+import Post from '../Post';
 
 import { getPosts } from '../../store/actions/postActions';
+import Preloader from '../Preloader';
+import Navbar from '../Navbar';
+import Typography from '@material-ui/core/Typography';
 
-const mapStateToProps = state => ({
-    posts: state.postReducer.posts
-});
+const Posts = () => {
+    const dispatch = useDispatch();
 
- const Posts = connect(mapStateToProps, { getPosts })(props => {
-    const { posts, getPosts } = props;
+    const posts = useSelector(store => store.postReducer.posts);
+    const isFetching = useSelector(store => store.toggleIsFetchingReducer.isFetching);
 
     useEffect(() => {
-        getPosts();
-    }, [getPosts]);
+        dispatch(getPosts());
+    }, [ dispatch ]);
+
 
     if (!posts) {
-        return <Spinner />
+        return <Preloader />
     }
 
     return (
-        <div>
+        <>
+            {isFetching ? <Preloader /> : null}
+            <Navbar />
             <Helmet>
                 <title>Главная страница</title>
             </Helmet>
-            { posts.map(post => {
-                return <Post key={ post._id } post={ post } />
-            }) }
-        </div>
+            <Container component='section' maxWidth='md'>
+                {(posts.length) > 0
+                    ? posts.map(post => {
+                        return <Post key={post._id} post={post} />
+                    })
+                    : <Typography variant="h2" gutterBottom>
+                        Нет ни одного поста
+                    </Typography>}
+            </Container>
+        </>
     );
-});
+};
 
 export default Posts;
