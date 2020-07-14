@@ -1,69 +1,96 @@
 import React, { useEffect } from 'react';
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import Helmet from "react-helmet";
+import Helmet from 'react-helmet';
 
-import { Spinner } from '../Spinner/Spinner';
-import { AddComment } from '../AddComment/AddComment';
-import { Comments } from '../Comments/Comments';
+import Preloader from '../Preloader';
 
 import { getPost, deletePost } from '../../store/actions/postActions';
 
+import { APIUrls } from '../../configs/APIUrls';
+import { Button, Typography } from '@material-ui/core';
 
-const mapStateToProps = state => ({
-    user: state.authReducer.user,
-    post: state.postReducer.post
-});
+import useStyles from './style';
+import Divider from '@material-ui/core/Divider';
+import clsx from 'clsx';
+import Navbar from '../Navbar';
+import Container from '@material-ui/core/Container';
 
+const PostPage = (props) => {
+    const classes = useStyles();
 
-const PostPage = connect(mapStateToProps, { getPost, deletePost })(props => {
-    const { getPost, history, post, user } = props;
+    const dispatch = useDispatch();
+    const post = useSelector(store => store.postReducer.post);
+    const isFetching = useSelector(store => store.toggleIsFetchingReducer.isFetching);
+
+    const { history } = props;
+    const id = props.match.params.id;
 
     useEffect(() => {
-        const id = props.match.params.id;
+        dispatch(getPost(id));
+    }, [ dispatch, id ]);
 
-        getPost(id);
-    }, [ getPost, props.match.params.id ]);
-
-
-    const deletePost = () => {
-        const id = props.match.params.id;
-
-        props.deletePost(id, history);
+    const onDeletePost = () => {
+        dispatch(deletePost(id, history));
     };
 
     if (!post) {
-        return <Spinner />
+        return <Preloader />
     }
+
     return (
-        <div>
-            <Helmet>
-                <title>{ post.title }</title>
-            </Helmet>
+        <>
+            {isFetching ? <Preloader /> : null}
+            <Navbar />
+            <Container component='main' maxWidth='md' className={classes.root}>
+                <Helmet>
+                    <title>{post.title}</title>
+                </Helmet>
 
-            <h1>{ post.title }</h1>
+                <Typography variant="h3" display="block" gutterBottom>
+                    {post.title}
+                </Typography>
 
-            <p className="text-muted">{ post.author.name }</p>
+                <Divider light />
 
-            <p>{ post.text }</p>
+                <Typography display="block" gutterBottom className={classes.textMuted}>
+                    {`Post author : ${post.author ? post.author.name : 'unknown author'}`}
+                </Typography>
 
-            { user && user.id === post.author._id ? (
-                <div className='mb-3'>
-                    <button onClick={ deletePost } className='btn btn-danger mr-2'>
-                        Удалить
-                    </button>
-                    <Link className=' btn btn-info mr-2' to={ `/edit/${ post._id }` }>
-                        Редактировать
+                <Typography variant="subtitle1" display="block" gutterBottom>
+                    {post.text}
+                </Typography>
+
+                <div className={classes.marginBottom}>
+                    <Link to={APIUrls.homePage}>
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            color="primary"
+                            className={classes.margin}
+                        >
+                            Вернуться на главную
+                        </Button>
                     </Link>
+                    <Link to={`${APIUrls.editPost}/${post._id}`} className={classes.textDecoration}>
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            color="default"
+                            className={clsx(classes.margin)}
+                        >
+                            Редактировать
+                        </Button>
+
+                    </Link>
+                    <Button onClick={onDeletePost} className={classes.margin} variant="contained"
+                            color="secondary" type="submit">
+                        Удалить
+                    </Button>
                 </div>
-            ) : null }
-
-            <AddComment />
-            <Comments comments={ post.comments } />
-        </div>
+            </Container>
+        </>
     );
-
-});
+};
 
 export default PostPage;
-

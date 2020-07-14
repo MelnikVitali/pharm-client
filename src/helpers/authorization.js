@@ -4,6 +4,8 @@ import js_cookie from 'js-cookie';
 import STORAGE from './storage';
 import { history } from './history';
 
+import {APIUrls} from '../configs/APIUrls';
+
 const getTokenStorage = STORAGE.getItem('accessToken');
 let isAlreadyFetchingAccessToken = false;
 let subscribers = [];
@@ -38,10 +40,8 @@ export async function resetTokenAndReattemptRequest(error) {
         const { response: errorResponse } = error;
         const resetToken = js_cookie.get('refreshToken');
 
-        console.log('resetTokenAndReattemptRequest');
-
         if (!resetToken) {
-            history.push('/logout');
+            history.push(APIUrls.logout);
 
             return Promise.reject(error);
         }
@@ -59,8 +59,9 @@ export async function resetTokenAndReattemptRequest(error) {
 
             await axios({
                 method: 'post',
-                url: `/refresh-tokens`
-            }).then(res => {
+                url: APIUrls.refreshTokens
+            })
+                .then(res => {
                 const newToken = res.data.accessToken;
                 setAuthBearerToken(newToken);
 
@@ -68,12 +69,14 @@ export async function resetTokenAndReattemptRequest(error) {
                 STORAGE.setItem('accessToken', newToken);
 
                 isAlreadyFetchingAccessToken = false;
-            }).catch(error => {
-                history.push('/logout');
+            })
+                .catch(error => {
+                history.push(APIUrls.logout);
 
                 return Promise.reject(error);
             });
         }
+
         return retryOriginalRequest;
     } catch (err) {
         return Promise.reject(err);

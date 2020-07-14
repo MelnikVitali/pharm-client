@@ -2,7 +2,8 @@ import * as actions from '../actions/types';
 
 const initialState = {
     post: null,
-    posts: null
+    posts: null,
+    isFetching: false
 };
 
 export default (state = initialState, action) => {
@@ -21,10 +22,6 @@ export default (state = initialState, action) => {
 
         case actions.DELETE_POST:
             return { ...state, post: null };
-
-        case actions.ADD_COMMENT:
-        case actions.DELETE_COMMENT:
-            return { ...state, post: action.post};
 
         default:
             return state;
