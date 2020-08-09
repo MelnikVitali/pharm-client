@@ -2,5 +2,10 @@
   "root": "build/",
   "routes": {
     "/**": "index.html"
+  },
+  "proxy": {
+    "/": {
+      "origin": "https://pharm-backend.herokuapp.com"
+    }
   }
 }
