@@ -16,8 +16,8 @@ export const getImages = () => async dispatch => {
 
         const images = res.data.map(image => {
             return {
-                src: `${APIUrls.baseGetImage}/${image.imageName}.png`,
-                bigSrc: `${APIUrls.baseGetImage}/${image.imageName}.png`,
+                src: `${image.base64}`,
+                bigSrc: `${image.base64}`,
                 id: image._id,
                 imageName: image.imageName,
                 originalName: image.originalName
