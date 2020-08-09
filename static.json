@@ -5,11 +5,8 @@
   },
   "https_only": true,
   "proxy": {
-    "/api": {
-      "target": "https://pharm-backend.herokuapp.com",
-      "pathRewrite": {
-        "^/api": "/"
-      }
+    "/api/": {
+      "origin": "https://pharm-backend.herokuapp.com"
     }
   }
 }
