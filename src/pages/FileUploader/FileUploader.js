@@ -17,6 +17,7 @@ import Copyright from '../../components/Copyright';
 import Login from '../../components/Login';
 
 import useStyles from './styles';
+import { APIUrls } from '../../configs/APIUrls';
 
 const acceptedFiles = [
     'image/jpeg',
@@ -73,7 +74,7 @@ const FileUploader = () => {
         try {
             await dispatch(toggleIsFetching(true));
 
-            const res = await axios.post(`/content`, fd, config);
+            const res = await axios.post(`${APIUrls.fileUpload}`, fd, config);
 
             if (res) {
                 dispatch(toggleIsFetching(false));

@@ -3,7 +3,7 @@ export const APIUrls = {
     register: '/api/register',
     login: '/api/login',
     logout: '/api/logout',
-    fileUpload: '/api/file-upload',
+    fileUpload: '/api/content',
     images: '/api/images',
     addPost: '/api/add',
     editPost: '/api/edit',
