@@ -1,6 +1,5 @@
 export const APIUrls = {
-    baseURL: 'http://localhost:5000',
-    baseGetImage: 'http://localhost:5000/images',
+    baseGetImage: 'https://pharm-backend.herokuapp.com/images',
     register: '/api/register',
     login: '/api/login',
     logout: '/api/logout',
