@@ -15,7 +15,7 @@ import Navbar from '../../components/Navbar';
 import Copyright from '../../components/Copyright';
 import Preloader from '../../components/Preloader';
 
-import { APIUrls } from '../../configs/APIUrls';
+import { RoutesUrls } from '../../configs/RoutesUrls';
 
 import useStyles from './styles';
 
@@ -135,7 +135,7 @@ const EditPost = props => {
                                 Редактировать
                             </Button>
 
-                            <Link to={`${APIUrls.post}/${post._id}`} className={classes.link}>
+                            <Link to={`${RoutesUrls.post}/${post._id}`} className={classes.link}>
                                 <Button
                                     type="submit"
                                     variant="contained"

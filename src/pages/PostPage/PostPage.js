@@ -7,7 +7,7 @@ import { getPost, deletePost } from '../../store/actions/postActions';
 
 import { Button, Typography, Divider, Container } from '@material-ui/core';
 
-import { APIUrls } from '../../configs/APIUrls';
+import { RoutesUrls } from '../../configs/RoutesUrls';
 
 import Preloader from '../../components/Preloader';
 import Navbar from '../../components/Navbar';
@@ -61,7 +61,7 @@ const PostPage = (props) => {
                 </Typography>
 
                 <div className={classes.marginBottom}>
-                    <Link to={APIUrls.homePage}>
+                    <Link to={RoutesUrls.homePage}>
                         <Button
                             type="submit"
                             variant="contained"
@@ -71,7 +71,7 @@ const PostPage = (props) => {
                             Вернуться на главную
                         </Button>
                     </Link>
-                    <Link to={`${APIUrls.editPost}/${post._id}`} className={classes.textDecoration}>
+                    <Link to={`${RoutesUrls.editPost}/${post._id}`} className={classes.textDecoration}>
                         <Button
                             type="submit"
                             variant="contained"

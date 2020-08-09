@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { logoutUser } from '../../store/actions/authActions';
 
-import { APIUrls } from '../../configs/APIUrls';
+import { RoutesUrls } from '../../configs/RoutesUrls';
 
 export const Logout = ({ history }) => {
     const dispatch = useDispatch();
@@ -13,7 +13,7 @@ export const Logout = ({ history }) => {
     useEffect(() => {
         dispatch(logoutUser({ userId }));
 
-        history.push(APIUrls.login);
+        history.push(RoutesUrls.login);
     }, [ dispatch, history, userId ]);
 
     return (

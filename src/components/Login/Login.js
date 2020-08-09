@@ -28,6 +28,7 @@ import { clearErrors } from '../../store/actions/errorActions';
 import { socialLogin } from '../../store/actions/authActions';
 
 import { APIUrls } from '../../configs/APIUrls';
+import { RoutesUrls } from '../../configs/RoutesUrls';
 import { socialAuth } from '../../configs/socialAuth';
 
 import { history } from '../../helpers/history';
@@ -35,8 +36,8 @@ import STORAGE from '../../helpers/storage';
 
 import Navbar from '../Navbar';
 import Preloader from '../Preloader';
-
 import Copyright from '../Copyright';
+
 import useStyles from './style';
 
 const Login = () => {
@@ -54,7 +55,7 @@ const Login = () => {
         dispatch(clearErrors());
 
         if (user && storageToken) {
-            history.push(APIUrls.homePage);
+            history.push(RoutesUrls.homePage);
         }
     }, [ storageToken, user, dispatch ]);
 
@@ -235,10 +236,10 @@ const Login = () => {
                     </Button>
 
                     <Grid container>
-                        <Grid component={Link} to={APIUrls.forgotPassword} variant="body2" item xs>
+                        <Grid component={Link} to={RoutesUrls.forgotPassword} variant="body2" item xs>
                             Forgot password?
                         </Grid>
-                        <Grid component={Link} to={APIUrls.register} variant="body2" item>
+                        <Grid component={Link} to={RoutesUrls.register} variant="body2" item>
                             {"Don't have an account? Sign Up"}
                         </Grid>
                     </Grid>

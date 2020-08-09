@@ -18,7 +18,7 @@ import { forgotPassword } from '../../store/actions/authActions';
 import { clearErrors } from '../../store/actions/errorActions';
 import { clearSuccess } from '../../store/actions/successActions';
 
-import { APIUrls } from '../../configs/APIUrls';
+import { RoutesUrls } from '../../configs/RoutesUrls';
 
 import Navbar from '../Navbar';
 import Preloader from '../Preloader';
@@ -126,7 +126,7 @@ const ForgotPassword = () => {
                         <Button
                             variant="outlined"
                             component={Link}
-                            to={APIUrls.homePage}
+                            to={RoutesUrls.homePage}
                         >
                             LogIn
                         </Button>
@@ -136,7 +136,7 @@ const ForgotPassword = () => {
                             display='block'
                             align='center'
                             component={Link}
-                            to={APIUrls.homePage}
+                            to={RoutesUrls.homePage}
                         >
                             I remember my password!
                         </Typography>

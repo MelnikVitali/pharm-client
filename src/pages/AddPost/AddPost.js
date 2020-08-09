@@ -11,14 +11,17 @@ import {
     Typography,
     TextField
 } from '@material-ui/core';
+import Container from '@material-ui/core/Container';
 
-import useStyles from './styles';
 import Navbar from '../../components/Navbar';
 import Copyright from '../../components/Copyright';
-import Container from '@material-ui/core/Container';
 import Preloader from '../../components/Preloader';
-import { APIUrls } from '../../configs/APIUrls';
+
+import { RoutesUrls } from '../../configs/RoutesUrls';
+
 import STORAGE from '../../helpers/storage';
+
+import useStyles from './styles';
 
 const AddPost = props => {
     const classes = useStyles();
@@ -31,7 +34,7 @@ const AddPost = props => {
     const storageToken = STORAGE.getItem('accessToken');
     useEffect(() => {
         if (!storageToken) {
-            history.push(APIUrls.login);
+            history.push(RoutesUrls.login);
         }
     }, [ history, storageToken ]);
 

@@ -22,7 +22,7 @@ import { resetPassword } from '../../store/actions/authActions';
 import { clearErrors } from '../../store/actions/errorActions';
 import { clearSuccess } from '../../store/actions/successActions';
 
-import { APIUrls } from '../../configs/APIUrls';
+import { RoutesUrls } from '../../configs/RoutesUrls';
 
 import Preloader from '../Preloader';
 
@@ -201,7 +201,7 @@ const ResetPassword = (props) => {
                         <Button
                             variant="outlined"
                             component={Link}
-                            to={APIUrls.homePage}
+                            to={RoutesUrls.homePage}
                         >
                          LogIn
                         </Button>

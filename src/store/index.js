@@ -11,13 +11,13 @@ import {
     isTokenExpiredError,
     deleteTokensAndAuthBearerTokenAndPushLogIn
 } from '../helpers/authorization';
-
 import { history } from '../helpers/history';
-
-import reducers from './reducers';
+import STORAGE from '../helpers/storage';
 
 import { APIUrls } from '../configs/APIUrls';
-import STORAGE from '../helpers/storage';
+import { RoutesUrls } from '../configs/RoutesUrls';
+
+import reducers from './reducers';
 
 axios.interceptors.response.use((response) => {
     return response;
@@ -52,7 +52,7 @@ axios.interceptors.response.use((response) => {
             break;
 
         case 404:
-            history.push(APIUrls.notfound);
+            history.push(RoutesUrls.notfound);
             break;
 
         default:

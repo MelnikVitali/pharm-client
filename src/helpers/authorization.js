@@ -5,6 +5,7 @@ import STORAGE from './storage';
 import { history } from './history';
 
 import { APIUrls } from '../configs/APIUrls';
+import { RoutesUrls } from '../configs/RoutesUrls';
 
 const getTokenStorage = STORAGE.getItem('accessToken');
 const getRefreshTokenCookie = js_cookie.get('refreshToken');
@@ -27,7 +28,7 @@ export function deleteTokensAndAuthBearerTokenAndPushLogIn() {
 
     setAuthBearerToken(null);
 
-    history.push(APIUrls.login);
+    history.push(RoutesUrls.login);
 }
 
 export function isTokenExpiredError() {

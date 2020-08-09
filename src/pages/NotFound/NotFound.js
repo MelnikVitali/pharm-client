@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 
-import { APIUrls } from '../../configs/APIUrls';
-
 import Copyright from '../../components/Copyright';
+
+import { RoutesUrls } from '../../configs/RoutesUrls';
 
 import useStyles from './styles';
 
@@ -23,7 +23,7 @@ const NotFound = () => {
                     Страница не найдена
                 </Typography>
                 <Typography component='p' variant="body1" align='center'>
-                    Вернуться на <Link to={APIUrls.homePage}>главную страницу</Link>
+                    Вернуться на <Link to={RoutesUrls.homePage}>главную страницу</Link>
                 </Typography>
             </Container>
             <Copyright />

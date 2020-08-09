@@ -16,10 +16,9 @@ import DescriptionIcon from '@material-ui/icons/Description';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import PermMediaIcon from '@material-ui/icons/PermMedia';
 
-import { APIUrls } from '../../configs/APIUrls';
+import { RoutesUrls } from '../../configs/RoutesUrls';
 
 import useStyles from './styles';
-
 
 const Navbar = (props) => {
     const { window } = props;
@@ -46,7 +45,7 @@ const Navbar = (props) => {
             <List>
                 <ListItem
                     component={Link}
-                    to={APIUrls.homePage}
+                    to={RoutesUrls.homePage}
                     className={classes.link}
                     button
                 >
@@ -57,7 +56,7 @@ const Navbar = (props) => {
                 </ListItem>
                 <ListItem
                     component={Link}
-                    to={APIUrls.addPost}
+                    to={RoutesUrls.addPost}
                     className={classes.link}
                     button
                 >
@@ -68,7 +67,7 @@ const Navbar = (props) => {
                 </ListItem>
                 <ListItem
                     component={Link}
-                    to={APIUrls.fileUpload}
+                    to={RoutesUrls.fileUpload}
                     className={classes.link}
                     button
                 >
@@ -79,7 +78,7 @@ const Navbar = (props) => {
                 </ListItem>
                 <ListItem
                     component={Link}
-                    to={APIUrls.images}
+                    to={RoutesUrls.images}
                     className={classes.link}
                     button>
                     <ListItemIcon>
@@ -103,7 +102,7 @@ const Navbar = (props) => {
             <ListItem
                 button
                 component={Link}
-                to={APIUrls.logout}
+                to={RoutesUrls.logout}
                 className={clsx(classes.link, classes.linkColorHover)}
                 activeClassName={classes.active}
             >
@@ -117,7 +116,7 @@ const Navbar = (props) => {
             <ListItem
                 button
                 component={Link}
-                to={APIUrls.login}
+                to={RoutesUrls.login}
                 className={clsx(classes.link, classes.linkColorHover)}
                 activeClassName={classes.active}
             >
@@ -125,7 +124,7 @@ const Navbar = (props) => {
             </ListItem>
             <ListItem button
                       component={Link}
-                      to={APIUrls.register}
+                      to={RoutesUrls.register}
                       className={clsx(classes.link, classes.linkColorHover)}
                       activeClassName={classes.active}
             >
@@ -157,7 +156,7 @@ const Navbar = (props) => {
 
                     <Typography
                         component={Link}
-                        to={APIUrls.homePage}
+                        to={RoutesUrls.homePage}
                         variant="h6"
                         noWrap
                         className={clsx(classes.link, classes.linkHome, classes.linkColorHover)}
@@ -169,7 +168,7 @@ const Navbar = (props) => {
                         <List component='nav' color='inherit' className={classes.navMenu}>
                             <ListItem
                                 component={Link}
-                                to={APIUrls.addPost}
+                                to={RoutesUrls.addPost}
                                 className={clsx(classes.link, classes.linkColorHover)}
                                 activeClassName={classes.active}
                             >
@@ -177,7 +176,7 @@ const Navbar = (props) => {
                             </ListItem>
                             <ListItem
                                 component={Link}
-                                to={APIUrls.fileUpload}
+                                to={RoutesUrls.fileUpload}
                                 className={clsx(classes.link, classes.linkColorHover)}
                                 activeClassName={classes.active}
                             >
@@ -185,7 +184,7 @@ const Navbar = (props) => {
                             </ListItem>
                             <ListItem
                                 component={Link}
-                                to={APIUrls.images}
+                                to={RoutesUrls.images}
                                 className={clsx(classes.link, classes.linkColorHover)}
                                 activeClassName={classes.active}
                             >

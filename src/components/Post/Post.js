@@ -7,7 +7,7 @@ import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
-import { APIUrls } from '../../configs/APIUrls';
+import { RoutesUrls } from '../../configs/RoutesUrls';
 
 import useStyles from './style';
 
@@ -29,7 +29,7 @@ const Post = (props) => {
                 </Typography>
             </CardContent>
             <CardActions>
-                <Link to={`${APIUrls.post}/${post._id}`}>
+                <Link to={`${RoutesUrls.post}/${post._id}`}>
                     <Button
                         type="submit"
                         variant="contained"

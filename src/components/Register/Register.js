@@ -21,7 +21,7 @@ import { clearErrors } from '../../store/actions/errorActions';
 import { registerUser } from '../../store/actions/authActions';
 import { clearSuccess } from '../../store/actions/successActions';
 
-import { APIUrls } from '../../configs/APIUrls';
+import { RoutesUrls } from '../../configs/RoutesUrls';
 
 import Preloader from '../Preloader';
 import Navbar from '../Navbar';
@@ -238,7 +238,7 @@ const Register = () => {
                         <Grid container justify="flex-end">
                             <Grid
                                 component={Link}
-                                to={APIUrls.login}
+                                to={RoutesUrls.login}
                                 variant="body2"
                                 item
                             >

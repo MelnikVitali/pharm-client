@@ -5,7 +5,7 @@
   },
   "https_only": true,
   "proxy": {
-    "/": {
+    "/api/": {
       "origin": "https://pharm-backend.herokuapp.com"
     }
   }

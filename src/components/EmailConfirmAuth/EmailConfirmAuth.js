@@ -10,16 +10,16 @@ import Container from '@material-ui/core/Container';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+
 import { confirmEmail, repeatEmailActivation } from '../../store/actions/authActions';
 import { clearErrors } from '../../store/actions/errorActions';
-
 import { clearSuccess } from '../../store/actions/successActions';
+
+import { RoutesUrls } from '../../configs/RoutesUrls';
 
 import Preloader from '../Preloader';
 
-import { APIUrls } from '../../configs/APIUrls';
 import useStyles from './styles';
 
 const EmailConfirmAuth = props => {
@@ -95,7 +95,7 @@ const EmailConfirmAuth = props => {
                             color="primary"
                             fontSize="large"
                             className={classes.btn}
-                            to={APIUrls.homePage}
+                            to={RoutesUrls.homePage}
                         >
                             Перейти на страницу входа
                         </Button>
