@@ -4,7 +4,7 @@ export const APIUrls = {
     login: '/api/login',
     logout: '/api/logout',
     fileUpload: '/api/content',
-    images: '/api/images',
+    images: '/api/media',
     addPost: '/api/add',
     editPost: '/api/edit',
     post: '/api/post',
