@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { logoutUser } from '../../store/actions/authActions';
 
@@ -8,11 +8,13 @@ import { APIUrls } from '../../configs/APIUrls';
 export const Logout = ({ history }) => {
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        dispatch(logoutUser());
+    const userId = useSelector(store => store.authReducer.user.userId);
 
-        history.replace(APIUrls.login);
-    }, [ dispatch, history ]);
+    useEffect(() => {
+        dispatch(logoutUser({ userId }));
+
+        history.push(APIUrls.login);
+    }, [ dispatch, history, userId ]);
 
     return (
         <div>Выход</div>

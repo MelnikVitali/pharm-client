@@ -3,35 +3,38 @@ import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import * as QueryString from "query-string";
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import IconButton from '@material-ui/core/IconButton';
+import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import AlertTitle from '@material-ui/lab/AlertTitle';
+import { Alert } from '@material-ui/lab';
 
 import { resetPassword } from '../../store/actions/authActions';
 import { clearErrors } from '../../store/actions/errorActions';
+import { clearSuccess } from '../../store/actions/successActions';
 
 import { APIUrls } from '../../configs/APIUrls';
 
-import useStyles from './style';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import IconButton from '@material-ui/core/IconButton';
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import { clearSuccess } from '../../store/actions/successActions';
-import { Alert } from '@material-ui/lab';
-import AlertTitle from '@material-ui/lab/AlertTitle';
 import Preloader from '../Preloader';
+
+import useStyles from './style';
 
 const ResetPassword = (props) => {
     const classes = useStyles();
 
     const dispatch = useDispatch();
 
-    const token = props.match.params.token;
+    const params = QueryString.parse(props.location.search);
+    const token = params.token;
 
     const errorsServer = useSelector(store => store.errorReducer);
     const successServer = useSelector(store => store.successReducer);
@@ -90,7 +93,7 @@ const ResetPassword = (props) => {
     return (
         <>
             {isFetching ? <Preloader /> : null}
-            <Container component="main" maxWidth="xs">
+            <Container component="main" maxWidth="xs" className={classes.root}>
 
                 <div className={classes.paper}>
 
@@ -200,7 +203,7 @@ const ResetPassword = (props) => {
                             component={Link}
                             to={APIUrls.homePage}
                         >
-                            Cancel
+                         LogIn
                         </Button>
 
                     </form>
