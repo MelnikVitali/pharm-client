@@ -9,6 +9,7 @@ import * as actions from './types';
 import { history } from '../../helpers/history';
 
 import { APIUrls } from '../../configs/APIUrls';
+import { RoutesUrls } from '../../configs/RoutesUrls';
 
 import { toggleIsFetching } from './toggleIsFetchingActions';
 
@@ -194,7 +195,7 @@ export const logoutUser = (userIdData) => async dispatch => {
 
         await setAuthBearerToken(null);
 
-        await history.push(APIUrls.login);
+        await history.push(RoutesUrls.login);
 
         dispatch(setCurrentUser(null));
 
