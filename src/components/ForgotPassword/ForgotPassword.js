@@ -3,14 +3,16 @@ import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+
 import 'react-toastify/dist/ReactToastify.css';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
+import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
+import { Alert } from '@material-ui/lab';
 
 import { forgotPassword } from '../../store/actions/authActions';
 import { clearErrors } from '../../store/actions/errorActions';
@@ -18,10 +20,11 @@ import { clearSuccess } from '../../store/actions/successActions';
 
 import { APIUrls } from '../../configs/APIUrls';
 
-import useStyles from './style';
 import Navbar from '../Navbar';
-import { Alert } from '@material-ui/lab';
 import Preloader from '../Preloader';
+import Copyright from '../Copyright';
+
+import useStyles from './style';
 
 const ForgotPassword = () => {
     const classes = useStyles();
@@ -65,7 +68,7 @@ const ForgotPassword = () => {
             {isFetching ? <Preloader /> : null}
             <Navbar />
 
-            <Container component="main" maxWidth="xs">
+            <Container component="main" maxWidth="xs" className={classes.root}>
 
                 <div className={classes.paper}>
 
@@ -125,7 +128,7 @@ const ForgotPassword = () => {
                             component={Link}
                             to={APIUrls.homePage}
                         >
-                            Cancel
+                            LogIn
                         </Button>
 
                         <Typography
@@ -142,6 +145,7 @@ const ForgotPassword = () => {
                 </div>
 
             </Container>
+            <Copyright />
         </>
     );
 };

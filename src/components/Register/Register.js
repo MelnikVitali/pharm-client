@@ -8,25 +8,26 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import IconButton from '@material-ui/core/IconButton';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import { Alert } from '@material-ui/lab';
 
 import { clearErrors } from '../../store/actions/errorActions';
 import { registerUser } from '../../store/actions/authActions';
-
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import { clearSuccess } from '../../store/actions/successActions';
 
 import { APIUrls } from '../../configs/APIUrls';
 
-import useStyles from './style';
-import { clearSuccess } from '../../store/actions/successActions';
 import Preloader from '../Preloader';
 import Navbar from '../Navbar';
-import { Alert } from '@material-ui/lab';
+import Copyright from '../Copyright';
+
+import useStyles from './style';
 
 const Register = () => {
     const classes = useStyles();
@@ -71,7 +72,7 @@ const Register = () => {
         onSubmit: fields => dispatch(registerUser(fields))
     });
 
-     const onFocus = () => {
+    const onFocus = () => {
         dispatch(clearErrors());
         dispatch(clearSuccess());
     };
@@ -94,7 +95,7 @@ const Register = () => {
             {isFetching ? <Preloader /> : null}
 
             <Navbar />
-            <Container component="main" maxWidth="xs">
+            <Container component="main" maxWidth="xs" className={classes.root}>
 
                 <div className={classes.paper}>
 
@@ -230,6 +231,7 @@ const Register = () => {
                             fullWidth
                             color="primary"
                             className={classes.submit}
+                            size="medium"
                         >
                             Sign Up
                         </Button>
@@ -246,6 +248,7 @@ const Register = () => {
                     </form>
                 </div>
             </Container>
+            <Copyright />
         </>
     );
 };

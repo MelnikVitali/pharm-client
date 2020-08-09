@@ -5,14 +5,12 @@ const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        flexGrow:1,
         display: 'flex',
         '& > * + *': {
             marginTop: theme.spacing(2),
         },
         marginBottom: theme.spacing(2)
     },
-
     appBar: {
         display: 'flex',
         justifyContent: 'center',
@@ -22,13 +20,13 @@ const useStyles = makeStyles((theme) => ({
         marginRight: theme.spacing(2),
     },
     // necessary for content to be below app bar
-    toolBar:{
+    toolBar: {
         width: '100%',
         maxWidth: 1170,
-        display:'flex',
+        display: 'flex',
         justifyContent: 'space-between',
 
-    } ,
+    },
     drawerPaper: {
         width: drawerWidth,
     },
@@ -36,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1,
         padding: theme.spacing(3),
     },
-    title:{
+    title: {
         flexGrow: 1,
     },
     link: {
@@ -44,12 +42,12 @@ const useStyles = makeStyles((theme) => ({
         textDecoration: 'none !important',
         color: 'unset !important',
     },
-    linkColorHover:{
+    linkColorHover: {
         '&:hover': {
             color: 'rgba(255,255,255,.75)!important',
         }
     },
-    linkHome:{
+    linkHome: {
         paddingBottom: 2,
         marginRight: theme.spacing(2),
     },
@@ -61,22 +59,22 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         justifyContent: 'flex-end'
     },
-    navMenu:{
-        display:'flex',
-        justifyContent:"flex-start",
+    navMenu: {
+        display: 'flex',
+        justifyContent: "flex-start",
         whiteSpace: 'nowrap',
         flexGrow: 1
     },
-    nawAuthMenu:{
-        display:'flex',
-        justifyContent:'flex-end',
+    nawAuthMenu: {
+        display: 'flex',
+        justifyContent: 'flex-end',
         flexWrap: 'nowrap',
     },
     active: {
         color: 'rgba(255,255,255,.75)!important',
         backgroundColor: theme.palette.action.selected,
     },
-    activeDrawer:{
+    activeDrawer: {
         backgroundColor: theme.palette.action.selected,
     },
     list: {

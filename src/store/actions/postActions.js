@@ -1,40 +1,85 @@
 import axios from 'axios';
-import * as actions from './types';
 
 import { APIUrls } from '../../configs/APIUrls';
 
-export const getPosts = () => async dispatch => {
-    const res = await axios.get(APIUrls.posts);
+import * as actions from './types';
+import { toggleIsFetching } from './toggleIsFetchingActions';
 
-    dispatch({ type: actions.GET_POSTS, posts: res.data });
+export const getPosts = () => async dispatch => {
+    try {
+        await dispatch(toggleIsFetching(true));
+
+        const res = await axios.get(APIUrls.posts);
+
+        await dispatch(toggleIsFetching(false));
+
+        dispatch({ type: actions.GET_POSTS, posts: res.data });
+
+    } catch (error) {
+        dispatch(toggleIsFetching(false));
+    }
 };
 
 export const getPost = (id) => async dispatch => {
-    const res = await axios.get(`${APIUrls.posts}/${id}`);
+    try {
+        await dispatch(toggleIsFetching(true));
 
-    dispatch({ type: actions.GET_POST, post: res.data });
+        const res = await axios.get(`${APIUrls.posts}/${id}`);
+
+        await dispatch(toggleIsFetching(false));
+
+        dispatch({ type: actions.GET_POST, post: res.data });
+
+    } catch (error) {
+        dispatch(toggleIsFetching(false));
+    }
 };
 
 export const addPost = (post, history) => async dispatch => {
-    await axios.post(APIUrls.posts, post);
+    try {
+        await dispatch(toggleIsFetching(true));
 
-    dispatch({ type: actions.ADD_POST });
+        await axios.post(APIUrls.posts, post);
 
-    history.push(APIUrls.homePage);
+        await dispatch(toggleIsFetching(false));
+
+        dispatch({ type: actions.ADD_POST });
+
+        history.push(APIUrls.homePage);
+
+    } catch (error) {
+        dispatch(toggleIsFetching(false));
+    }
 };
 
 export const editPost = (id, post, history) => async dispatch => {
-    await axios.put(`${APIUrls.posts}/${id}`, post);
+    try {
+        await dispatch(toggleIsFetching(true));
 
-    dispatch({ type: actions.EDIT_POST });
+        await axios.put(`${APIUrls.posts}/${id}`, post);
 
-    history.push(`${APIUrls.post}/${id}`);
+        await dispatch(toggleIsFetching(false));
+
+        dispatch({ type: actions.EDIT_POST });
+
+        history.push(`${APIUrls.post}/${id}`);
+
+    } catch (error) {
+        dispatch(toggleIsFetching(false));
+    }
 };
 
 export const deletePost = (id, history) => async dispatch => {
-    await axios.delete(`${APIUrls.posts}/${id}`);
+    try {
+        await dispatch(toggleIsFetching(true));
 
-    dispatch({ type: actions.DELETE_POST });
+        await axios.delete(`${APIUrls.posts}/${id}`);
 
-    history.replace(APIUrls.homePage);
+        dispatch({ type: actions.DELETE_POST });
+
+        history.replace(APIUrls.homePage);
+
+    } catch (error) {
+        dispatch(toggleIsFetching(false));
+    }
 };

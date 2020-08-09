@@ -6,13 +6,18 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { resetTokenAndReattemptRequest } from '../helpers/authorization';
+import {
+    resetTokenAndReattemptRequest,
+    isTokenExpiredError,
+    deleteTokensAndAuthBearerTokenAndPushLogIn
+} from '../helpers/authorization';
 
 import { history } from '../helpers/history';
 
 import reducers from './reducers';
 
 import { APIUrls } from '../configs/APIUrls';
+import STORAGE from '../helpers/storage';
 
 axios.interceptors.response.use((response) => {
     return response;
@@ -20,22 +25,38 @@ axios.interceptors.response.use((response) => {
     const { status } = error.response;
     const originalRequest = error.config;
 
-    if (error.response.status === 401 && originalRequest.url === APIUrls.refreshTokens) {
-        history.push(APIUrls.logout);
+    if (error.response && status === 401 && originalRequest.url === APIUrls.refreshTokens) {
+        deleteTokensAndAuthBearerTokenAndPushLogIn();
     }
 
     if (error.response && status === 401) {
-        originalRequest._retry = true;
+        const getTokenStorage = STORAGE.getItem('accessToken');
 
-        return resetTokenAndReattemptRequest(error);
+        if (getTokenStorage) {
+            if (isTokenExpiredError) {
+                return resetTokenAndReattemptRequest(error);
+            }
+
+        } else {
+            deleteTokensAndAuthBearerTokenAndPushLogIn();
+        }
     }
 
-    if (status === 500) {
-        toast.error('Ошибка сервера - проверьте терминал для получения дополнительной информации!');
-    }
+    switch (status) {
+        case 500:
+            toast.error('Ошибка сервера - проверьте терминал для получения дополнительной информации!');
+            break;
 
-    if (status === 429) {
-        toast.error('Слишком много аккаунтов создано с этого IP, повторите попытку через 15 минут');
+        case 429:
+            toast.error('Слишком много аккаунтов создано с этого IP, повторите попытку через 15 минут');
+            break;
+
+        case 404:
+            history.push(APIUrls.notfound);
+            break;
+
+        default:
+            break;
     }
 
     return Promise.reject(error);

@@ -1,4 +1,9 @@
+html {
+    height: 100%;
+}
+
 body {
+    height: 100%;
     margin: 0;
     font-family: "Open Sans", "Roboto", "Oxygen", sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -10,7 +15,17 @@ code {
     monospace;
 }
 
+a {
+    text-decoration: none !important;
+}
+
 button {
     outline: none !important;
+}
+
+#root {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 

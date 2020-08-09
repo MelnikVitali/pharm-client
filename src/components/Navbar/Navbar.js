@@ -11,11 +11,10 @@ import {
 } from '@material-ui/core';
 
 import HomeIcon from '@material-ui/icons/Home';
-
 import MenuIcon from '@material-ui/icons/Menu';
 import DescriptionIcon from '@material-ui/icons/Description';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
-import CastForEducationIcon from '@material-ui/icons/CastForEducation';
+import PermMediaIcon from '@material-ui/icons/PermMedia';
 
 import { APIUrls } from '../../configs/APIUrls';
 
@@ -80,13 +79,13 @@ const Navbar = (props) => {
                 </ListItem>
                 <ListItem
                     component={Link}
-                    to={APIUrls.learnMaterialUI}
+                    to={APIUrls.images}
                     className={classes.link}
                     button>
                     <ListItemIcon>
-                        <CastForEducationIcon />
+                        <PermMediaIcon />
                     </ListItemIcon>
-                    <ListItemText primary='Учить Material Ui' />
+                    <ListItemText primary='Галлерея изображений' />
                 </ListItem>
             </List>
             <Divider />
@@ -186,11 +185,11 @@ const Navbar = (props) => {
                             </ListItem>
                             <ListItem
                                 component={Link}
-                                to={APIUrls.learnMaterialUI}
+                                to={APIUrls.images}
                                 className={clsx(classes.link, classes.linkColorHover)}
                                 activeClassName={classes.active}
                             >
-                                <ListItemText primary='Учить Material Ui' />
+                                <ListItemText primary='Галлерея изображений' />
                             </ListItem>
                         </List>
                     </Hidden>

@@ -1,5 +1,4 @@
 {
-  "proxy": "http://localhost:5000",
   "name": "pharm-client",
   "version": "0.1.0",
   "private": true,
@@ -13,14 +12,19 @@
     "axios": "^0.19.2",
     "bootstrap": "^4.5.0",
     "clsx": "^1.1.1",
+    "dotenv": "^8.2.0",
     "formik": "^2.1.4",
     "js-cookie": "^2.2.1",
     "jsonwebtoken": "^8.5.1",
     "material-ui-dropzone": "^3.3.0",
     "prop-types": "^15.7.2",
+    "query-string": "^6.13.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-facebook-login": "^4.1.1",
+    "react-google-login": "^5.1.21",
     "react-helmet": "^6.1.0",
+    "react-photo-feed": "^1.0.13",
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
@@ -52,7 +56,6 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {
-    "redux-logger": "^3.0.6"
-  }
+  "devDependencies": {},
+  "proxy": "http://localhost:5000"
 }

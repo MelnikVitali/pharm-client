@@ -4,9 +4,11 @@ import js_cookie from 'js-cookie';
 import STORAGE from './storage';
 import { history } from './history';
 
-import {APIUrls} from '../configs/APIUrls';
+import { APIUrls } from '../configs/APIUrls';
 
 const getTokenStorage = STORAGE.getItem('accessToken');
+const getRefreshTokenCookie = js_cookie.get('refreshToken');
+
 let isAlreadyFetchingAccessToken = false;
 let subscribers = [];
 
@@ -16,6 +18,16 @@ export function setAuthBearerToken(token) {
     } else {
         delete axios.defaults.headers.common.Authorization;
     }
+}
+
+export function deleteTokensAndAuthBearerTokenAndPushLogIn() {
+    STORAGE.removeItem('accessToken');
+
+    js_cookie.remove('refreshToken');
+
+    setAuthBearerToken(null);
+
+    history.push(APIUrls.login);
 }
 
 export function isTokenExpiredError() {
@@ -38,12 +50,20 @@ function addSubscriber(callback) {
 export async function resetTokenAndReattemptRequest(error) {
     try {
         const { response: errorResponse } = error;
-        const resetToken = js_cookie.get('refreshToken');
 
-        if (!resetToken) {
-            history.push(APIUrls.logout);
+        if (!getRefreshTokenCookie) {
+            deleteTokensAndAuthBearerTokenAndPushLogIn();
 
             return Promise.reject(error);
+        } else if (getRefreshTokenCookie) {
+            const cookieDecoded = STORAGE.jwtDecode(getRefreshTokenCookie);
+            const currentTime = Date.now() / 1000;
+
+            if (cookieDecoded.exp < currentTime) {
+                deleteTokensAndAuthBearerTokenAndPushLogIn();
+
+                return Promise.reject(error);
+            }
         }
 
         const retryOriginalRequest = new Promise((resolve) => {
@@ -61,24 +81,27 @@ export async function resetTokenAndReattemptRequest(error) {
                 method: 'post',
                 url: APIUrls.refreshTokens
             })
-                .then(res => {
-                const newToken = res.data.accessToken;
-                setAuthBearerToken(newToken);
+                .then(async res => {
+                    const newToken = res.data.accessToken;
 
-                onAccessTokenFetched(newToken);
-                STORAGE.setItem('accessToken', newToken);
+                    await setAuthBearerToken(newToken);
 
-                isAlreadyFetchingAccessToken = false;
-            })
+                    await onAccessTokenFetched(newToken);
+                    STORAGE.setItem('accessToken', newToken);
+
+                    isAlreadyFetchingAccessToken = false;
+                })
                 .catch(error => {
-                history.push(APIUrls.logout);
+                    deleteTokensAndAuthBearerTokenAndPushLogIn();
 
-                return Promise.reject(error);
-            });
+                    return Promise.reject(error);
+                });
         }
 
         return retryOriginalRequest;
     } catch (err) {
+        deleteTokensAndAuthBearerTokenAndPushLogIn();
+
         return Promise.reject(err);
     }
 }

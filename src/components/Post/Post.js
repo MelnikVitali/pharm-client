@@ -7,21 +7,21 @@ import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
-import useStyles from './style';
-
 import { APIUrls } from '../../configs/APIUrls';
+
+import useStyles from './style';
 
 const Post = (props) => {
     const classes = useStyles();
 
-    const shortText = text => text.substr(0, 100) + "...";
+    const shortText = text => text.substr(0, 350) + "...";
 
     const { post } = props;
 
     return (
         <Card className={classes.root}>
             <CardContent>
-                <Typography variant="h3" component="h2">
+                <Typography variant="h3" component="h2" className={classes.titleMargin}>
                     {post.title}
                 </Typography>
                 <Typography variant="body2" component="p">
@@ -36,13 +36,12 @@ const Post = (props) => {
                         color="primary"
                         className={classes.button}
                     >
-                        Подробнеее
+                        Подробнее
                     </Button>
                 </Link>
             </CardActions>
         </Card>
-  );
+    );
 };
 
 export default Post;
-

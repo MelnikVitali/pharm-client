@@ -1,9 +1,11 @@
 export const APIUrls = {
-    baseURL: 'http://localhost:3000',
+    baseURL: 'http://localhost:5000',
+    baseGetImage: 'http://localhost:5000/images',
     register: '/register',
     login: '/login',
     logout: '/logout',
     fileUpload: '/file-upload',
+    images: '/images',
     homePage: '/',
     addPost: '/add',
     editPost: '/edit',
@@ -14,4 +16,8 @@ export const APIUrls = {
     forgotPassword: '/forgot-password',
     resetPassword: '/reset-password',
     emailActivation: '/email-activation',
+    repeatEmailActivation: '/repeat-email',
+    googleLogin: '/google-login',
+    facebookLogin: '/facebook-login',
+    notfound: '/notfound',
 };

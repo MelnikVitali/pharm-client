@@ -3,30 +3,43 @@ import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import axios from 'axios';
+
+import GoogleLogin from 'react-google-login';
+import FacebookLogin from 'react-facebook-login';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import { Alert } from '@material-ui/lab';
 import Grid from '@material-ui/core/Grid';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import IconButton from '@material-ui/core/IconButton';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import FacebookIcon from '@material-ui/icons/Facebook';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
+import { Alert } from '@material-ui/lab';
 import { loginUser } from '../../store/actions/authActions';
 import { clearErrors } from '../../store/actions/errorActions';
 
-import { APIUrls } from '../../configs/APIUrls';
+import { socialLogin } from '../../store/actions/authActions';
 
-import useStyles from './style';
+import { APIUrls } from '../../configs/APIUrls';
+import { socialAuth } from '../../configs/socialAuth';
+
+import { history } from '../../helpers/history';
+import STORAGE from '../../helpers/storage';
+
 import Navbar from '../Navbar';
 import Preloader from '../Preloader';
 
-const Login = ({ history }) => {
+import Copyright from '../Copyright';
+import useStyles from './style';
+
+const Login = () => {
     const classes = useStyles();
 
     const dispatch = useDispatch();
@@ -35,13 +48,15 @@ const Login = ({ history }) => {
     const user = useSelector(store => store.authReducer.user);
     const isFetching = useSelector(store => store.toggleIsFetchingReducer.isFetching);
 
+    const storageToken = STORAGE.getItem('accessToken');
+
     useEffect(() => {
         dispatch(clearErrors());
 
-        if (user) {
+        if (user && storageToken) {
             history.push(APIUrls.homePage);
         }
-    }, [ history, user, dispatch ]);
+    }, [ storageToken, user, dispatch ]);
 
     const {
         handleSubmit, handleChange,
@@ -76,9 +91,36 @@ const Login = ({ history }) => {
         event.preventDefault();
     };
 
+    const responseSuccessGoogle = (response) => {
+        axios({
+            method: "POST",
+            url: APIUrls.googleLogin, //Link to https://console.cloud.google.com/apis/credentials/
+            data: { tokenId: response.tokenId },
+        }).then(response => {
+            dispatch(socialLogin(response.data));
+        });
+    };
+
+    const responseErrorGoogle = (response) => {
+        console.log(response);
+    };
+
+    const responseFacebook = (response) => {
+        axios({
+            method: "POST",
+            url: APIUrls.facebookLogin, //Link to https://developers.facebook.com/
+            data: {
+                accessToken: response.accessToken,
+                userID: response.userID
+            },
+        }).then(response => {
+            dispatch(socialLogin(response.data));
+        });
+    };
+
     return (
         <>
-            {isFetching ? <Preloader/> : null}
+            {isFetching ? <Preloader /> : null}
             <Navbar />
 
             <Container component="main" maxWidth="xs" className={classes.paper}>
@@ -149,13 +191,44 @@ const Login = ({ history }) => {
                     {errorsServer.error || errorsServer.limit
                         ? <Alert severity="error">{errorsServer.error || errorsServer.limit}</Alert>
                         : null}
+                    <Typography
+                        component='div'
+                        variant="body2"
+                        display="block"
+                        gutterBottom
+                        className={classes.line}
+                    >
+                        or
+                    </Typography>
 
+                    <Grid container justify='space-between' spacing={2} className={classes.gridRoot}>
+                        <Grid item xs={12}>
+                            <GoogleLogin
+                                clientId={socialAuth.REACT_APP_GOOGLE_CLIENT_ID}
+                                buttonText="Login with Google"
+                                onSuccess={responseSuccessGoogle}
+                                onFailure={responseErrorGoogle}
+                                className={classes.google}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <FacebookLogin
+                                appId={socialAuth.REACT_APP_FACEBOOK_APP_ID}
+                                autoLoad={false}
+                                fields="name,email,picture"
+                                callback={responseFacebook}
+                                cssClass={classes.facebookBtn}
+                                icon={< FacebookIcon />}
+                            />
+                        </Grid>
+                    </Grid>
                     <Button
                         disabled={!isValid}
                         type="submit"
                         fullWidth
                         variant="contained"
                         color="primary"
+                        size="large"
                         className={classes.submit}
                     >
                         Submit
@@ -171,6 +244,7 @@ const Login = ({ history }) => {
                     </Grid>
                 </form>
             </Container>
+            <Copyright />
         </>
     );
 };
