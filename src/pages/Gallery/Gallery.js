@@ -41,7 +41,7 @@ const Gallery = () => {
             </Typography>
 
             <Container component='section' maxWidth='lg' className={classes.root}>
-                {(images && images.length) > 0
+                {(images && images.length > 0)
                     ? <PhotoGrid columns={3} photos={images} />
 
                     : <Typography
