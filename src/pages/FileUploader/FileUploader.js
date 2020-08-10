@@ -96,11 +96,11 @@ const FileUploader = () => {
 
             dispatch(toggleIsFetching(false));
 
-            if (error && error.response && error.response.data) {
+            if (error || (error && error.response && error.response.data)) {
                 return setState({
                     ...state,
                     open: false,
-                    serverError: error.response.data.error
+                    serverError: error.response.data.error || error
                 });
             }
         }
