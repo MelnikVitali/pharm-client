@@ -80,14 +80,14 @@ const FileUploader = () => {
                 dispatch(toggleIsFetching(false));
             }
 
-            const resReject = res.data.rejected.map(file => file.fileName);
-            const resSave = res.data.saved.map(file => file.originalName);
+            const resReject = res.data.rejected && res.data.rejected.map(file => file.fileName);
+            const resSave = res.data.saved && res.data.saved.map(file => file.originalName);
 
             return setState({
                 ...state,
                 open: false,
-                saved: resSave.join(', ') || '',
-                rejected: resReject.join(', ') || '',
+                saved: (resSave && resSave.join(', ')) || '',
+                rejected: (resReject && resReject.join(', ')) || '',
                 reason: 'A file with the same name already exists!',
                 serverResponse: true
             });
@@ -96,7 +96,7 @@ const FileUploader = () => {
 
             dispatch(toggleIsFetching(false));
 
-            if (error.response.data) {
+            if (error && error.response && error.response.data) {
                 return setState({
                     ...state,
                     open: false,

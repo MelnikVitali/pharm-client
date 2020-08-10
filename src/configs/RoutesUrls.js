@@ -5,7 +5,7 @@ export const RoutesUrls = {
     login: '/login',
     logout: '/logout',
     fileUpload: '/file-upload',
-    images: '/images',
+    images: '/pictures',
     homePage: '/',
     addPost: '/add',
     editPost: '/edit',

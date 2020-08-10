@@ -27,7 +27,7 @@ const Gallery = () => {
 
     useEffect(() => {
         dispatch(getImages());
-    }, []);
+    }, [dispatch]);
 
     return (
         <>
@@ -43,7 +43,6 @@ const Gallery = () => {
             <Container component='section' maxWidth='lg' className={classes.root}>
                 {(images && images.length > 0)
                     ? <PhotoGrid columns={3} photos={images} />
-
                     : <Typography
                         variant="h2"
                         gutterBottom

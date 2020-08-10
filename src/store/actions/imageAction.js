@@ -16,8 +16,12 @@ export const getImages = () => async dispatch => {
 
         const images = res.data.map(image => {
             return {
-                src: `${image.base64}`,
-                bigSrc: `${image.base64}`,
+                // src: `http://localhost:5000/images/${image.imageName}.webp`,
+                // bigSrc:  `http://localhost:5000/images/${image.imageName}.webp`,
+                src: `https://pharm-backend.herokuapp.com/images/${image.imageName}.png`,
+                bigSrc:  `https://pharm-backend.herokuapp.com/images/${image.imageName}.png`,
+                // src: `data:image/png;base64,${image.base64}`,
+                // bigSrc:  `data:image/png;base64,${image.base64}`,
                 id: image._id,
                 imageName: image.imageName,
                 originalName: image.originalName
