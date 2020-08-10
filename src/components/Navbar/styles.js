@@ -9,7 +9,9 @@ const useStyles = makeStyles((theme) => ({
         '& > * + *': {
             marginTop: theme.spacing(2),
         },
-        marginBottom: theme.spacing(2)
+        marginBottom: theme.spacing(2),
+        /* 0 flex-grow, 0 flex-shrink, auto flex-basis */
+        flex:' 0 0 auto'
     },
     appBar: {
         display: 'flex',

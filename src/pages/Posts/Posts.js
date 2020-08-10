@@ -33,10 +33,12 @@ const Posts = () => {
             <Helmet>
                 <title>Главная страница</title>
             </Helmet>
-            <Typography variant="h4" align='center'>
-                Статьи
-            </Typography>
+
             <Container component='section' maxWidth='lg' className={classes.root}>
+                <Typography variant="h4" align='center'>
+                    Статьи
+                </Typography>
+
                 {(posts && posts.length > 0)
                     ? posts.map(post => {
                         return <Post key={post._id} post={post} />

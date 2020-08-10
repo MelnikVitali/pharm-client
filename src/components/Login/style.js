@@ -37,7 +37,9 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'center',
         fontWeight: 'bold'
     },
-    google: {},
+    google: {
+        whiteSpace:'nowrap'
+    },
     avatar: {
         margin: theme.spacing(1),
         backgroundColor: theme.palette.secondary.main,
