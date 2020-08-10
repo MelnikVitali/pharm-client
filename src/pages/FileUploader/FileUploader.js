@@ -100,7 +100,7 @@ const FileUploader = () => {
                 return setState({
                     ...state,
                     open: false,
-                    serverError: error.response.data.error || '413 Request Entity Too Large'
+                    serverError: error.response.data.error || 'Request Entity Too Large'
                 });
             }
         }

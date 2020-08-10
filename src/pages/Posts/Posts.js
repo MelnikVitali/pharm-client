@@ -24,7 +24,7 @@ const Posts = () => {
 
     useEffect(() => {
         dispatch(getPosts());
-    }, []);
+    }, [dispatch]);
 
     return (
         <>
