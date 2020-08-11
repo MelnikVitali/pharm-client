@@ -92,15 +92,13 @@ const FileUploader = () => {
                 serverResponse: true
             });
         } catch (error) {
-            console.error(error);
-
             dispatch(toggleIsFetching(false));
 
             if (error && error.response && error.response.data) {
                 return setState({
                     ...state,
                     open: false,
-                    serverError: error.response.data.error || error.response.data
+                    serverError: error.response.data.error || 'Something went wrong!'
                 });
             }
         }
@@ -140,7 +138,7 @@ const FileUploader = () => {
                             filesLimit={4}
                             acceptedFiles={acceptedFiles}
                             showPreviews={true}
-                            maxFileSize={1000000}
+                            maxFileSize={3000000}
                             onClose={handleClose}
                             showFileNames={true}
                             showFileNamesInPreview={true}
