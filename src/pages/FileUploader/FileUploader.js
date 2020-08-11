@@ -100,7 +100,7 @@ const FileUploader = () => {
                 return setState({
                     ...state,
                     open: false,
-                    serverError: error.response.data.error
+                    serverError: error.response.data.error || error
                 });
             }
         }
@@ -137,7 +137,7 @@ const FileUploader = () => {
                         <DropzoneDialog
                             open={state.open}
                             onSave={handleSave}
-                            filesLimit={10}
+                            filesLimit={5}
                             acceptedFiles={acceptedFiles}
                             showPreviews={true}
                             maxFileSize={5000000}
