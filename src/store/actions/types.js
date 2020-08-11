@@ -8,6 +8,7 @@ export const EDIT_POST = "EDIT_POST";
 export const DELETE_POST = "DELETE_POST";
 
 export const GET_IMAGES = "GET_IMAGES";
+export const DELETE_IMAGE = "DELETE_IMAGE";
 
 export const ERROR = "ERROR";
 export const CLEAR_ERRORS = "CLEAR_ERRORS";
