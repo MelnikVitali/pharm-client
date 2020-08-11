@@ -54,6 +54,10 @@ axios.interceptors.response.use((response) => {
             toast.error('Слишком много аккаунтов создано с этого IP, повторите попытку через 15 минут');
             break;
 
+        case 413:
+            toast.error('413. Cлишком большой запрос на сервер');
+            break;
+
         case 404:
             history.push(RoutesUrls.notfound);
             break;
