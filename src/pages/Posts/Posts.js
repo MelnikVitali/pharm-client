@@ -13,18 +13,28 @@ import Copyright from '../../components/Copyright';
 
 import { getPosts } from '../../store/actions/postActions';
 
+import STORAGE from '../../helpers/storage';
+
+import { RoutesUrls } from '../../configs/RoutesUrls';
+
 import useStyles from './style';
 
-const Posts = () => {
+const Posts = ({ history }) => {
     const classes = useStyles();
     const dispatch = useDispatch();
 
     const posts = useSelector(store => store.postReducer.posts);
     const isFetching = useSelector(store => store.toggleIsFetchingReducer.isFetching);
 
+    const storageToken = STORAGE.getItem('accessToken');
+
     useEffect(() => {
+        if (!storageToken) {
+            history.push(RoutesUrls.login);
+        }
+
         dispatch(getPosts());
-    }, [dispatch]);
+    }, [ dispatch, storageToken, history ]);
 
     return (
         <>

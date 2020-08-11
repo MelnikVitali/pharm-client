@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { APIUrls } from '../../configs/APIUrls';
 
@@ -16,12 +18,7 @@ export const getImages = () => async dispatch => {
 
         const images = res.data.map(image => {
             return {
-                // src: `http://localhost:5000/images/${image.imageName}.webp`,
-                // bigSrc:  `http://localhost:5000/images/${image.imageName}.webp`,
-                // src: `https://pharm-backend.herokuapp.com/images/${image.imageName}.png`,
-                // bigSrc:  `https://pharm-backend.herokuapp.com/images/${image.imageName}.png`,
-                src: `data:image/webp;base64,${image.base64}`,
-                bigSrc:  `data:webp/png;base64,${image.base64}`,
+                img: `data:image/png;base64,${image.base64}`,
                 id: image._id,
                 imageName: image.imageName,
                 originalName: image.originalName
@@ -29,6 +26,24 @@ export const getImages = () => async dispatch => {
         })
 
         dispatch({ type: actions.GET_IMAGES, images: images });
+
+    } catch (error) {
+        dispatch(toggleIsFetching(false));
+    }
+};
+
+export const deleteImage = (id) => async dispatch => {
+    try {
+        await dispatch(toggleIsFetching(true));
+
+        const res = await axios.delete(`${APIUrls.images}/${id}`);
+
+        if (res) {
+            await dispatch(toggleIsFetching(false));
+            toast.success(res.data.message);
+        }
+
+        await dispatch({ type: actions.DELETE_IMAGE, payload: id });
 
     } catch (error) {
         dispatch(toggleIsFetching(false));
