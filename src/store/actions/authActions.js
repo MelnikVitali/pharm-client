@@ -15,6 +15,7 @@ import { toggleIsFetching } from './toggleIsFetchingActions';
 
 export const socialLogin = (loginData) => async dispatch => {
     try {
+
         const accessToken = loginData.accessToken;
 
         await STORAGE.setItem('accessToken', accessToken);
