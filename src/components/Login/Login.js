@@ -237,7 +237,7 @@ const Login = () => {
                                 appId={socialAuth.REACT_APP_FACEBOOK_APP_ID}
                                 autoLoad={true}
                                 fields="name,email,picture"
-                                scope="public_profile,user_friends"
+                                scope="public_profile,email"
                                 callback={responseFacebook}
                                 cssClass={classes.facebookBtn}
                                 textButton={<span>Facebook Log in</span>}
