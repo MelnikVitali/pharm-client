@@ -79,7 +79,11 @@ const Login = () => {
                     .min(6, 'Пароль должен состоять не менее чем из 6 символов')
                     .required('Укажите пароль'),
             }),
-            onSubmit: fields => dispatch(loginUser(fields))
+            onSubmit: fields => {
+                dispatch(clearErrors());
+
+                return dispatch(loginUser(fields));
+            }
         });
 
         const onFocus = () => {
@@ -247,7 +251,7 @@ const Login = () => {
                             <Grid item xs={6} sm={6}>
                                 <FacebookLogin
                                     appId={socialAuth.REACT_APP_FACEBOOK_APP_ID}
-                                    autoLoad={true}
+                                    autoLoad={false}
                                     fields="name,email,picture"
                                     scope="public_profile,email"
                                     callback={responseFacebook}
