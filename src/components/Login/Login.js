@@ -235,7 +235,7 @@ const Login = () => {
                         <Grid item xs={6} sm={6}>
                             <FacebookLogin
                                 appId={socialAuth.REACT_APP_FACEBOOK_APP_ID}
-                                autoLoad={false}
+                                autoLoad={true}
                                 fields="name,email,picture"
                                 scope="public_profile,user_friends"
                                 callback={responseFacebook}
