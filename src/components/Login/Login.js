@@ -97,13 +97,13 @@ const Login = () => {
         try {
             await dispatch(toggleIsFetching(true));
 
-            await axios({
+            const res = await axios({
                 method: "POST",
                 url: APIUrls.googleLogin, //Link to https://console.cloud.google.com/apis/credentials/
                 data: { tokenId: response.tokenId },
-            }).then(response => {
-                dispatch(socialLogin(response.data));
             });
+
+            await dispatch(socialLogin(res.data));
 
             await dispatch(toggleIsFetching(false));
 
@@ -121,16 +121,16 @@ const Login = () => {
         try {
             await dispatch(toggleIsFetching(true));
 
-            await axios({
+            const res = await axios({
                 method: "POST",
                 url: APIUrls.facebookLogin, //Link to https://developers.facebook.com/
                 data: {
                     accessToken: response.accessToken,
                     userID: response.userID
                 },
-            }).then(response => {
-                dispatch(socialLogin(response.data));
             });
+
+            await dispatch(socialLogin(res.data));
 
             await dispatch(toggleIsFetching(false));
 
