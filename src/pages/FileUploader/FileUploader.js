@@ -81,7 +81,7 @@ const FileUploader = () => {
             }
 
             const resReject = res.data.rejected && res.data.rejected.map(file => file.fileName);
-            const resSave = res.data.saved && res.data.saved.map(file => file.originalName);
+            const resSave = res.data.saved && res.data.saved.map(file => file.name);
 
             return setState({
                 ...state,
