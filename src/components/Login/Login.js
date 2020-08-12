@@ -39,6 +39,7 @@ import Preloader from '../Preloader';
 import Copyright from '../Copyright';
 
 import useStyles from './style';
+import { toggleIsFetching } from '../../store/actions/toggleIsFetchingActions';
 
 const Login = () => {
     const classes = useStyles();
@@ -92,31 +93,50 @@ const Login = () => {
         event.preventDefault();
     };
 
-    const responseSuccessGoogle = (response) => {
-        axios({
-            method: "POST",
-            url: APIUrls.googleLogin, //Link to https://console.cloud.google.com/apis/credentials/
-            data: { tokenId: response.tokenId },
-        }).then(response => {
-            dispatch(socialLogin(response.data));
-        });
+    const responseSuccessGoogle = async (response) => {
+        try {
+            await dispatch(toggleIsFetching(true));
+
+            await axios({
+                method: "POST",
+                url: APIUrls.googleLogin, //Link to https://console.cloud.google.com/apis/credentials/
+                data: { tokenId: response.tokenId },
+            }).then(response => {
+                dispatch(socialLogin(response.data));
+            });
+
+            await dispatch(toggleIsFetching(false));
+
+        } catch (e) {
+            await dispatch(toggleIsFetching(false));
+        }
+
     };
 
     const responseErrorGoogle = (response) => {
         console.log(response);
     };
 
-    const responseFacebook = (response) => {
-        axios({
-            method: "POST",
-            url: APIUrls.facebookLogin, //Link to https://developers.facebook.com/
-            data: {
-                accessToken: response.accessToken,
-                userID: response.userID
-            },
-        }).then(response => {
-            dispatch(socialLogin(response.data));
-        });
+    const responseFacebook = async (response) => {
+        try {
+            await dispatch(toggleIsFetching(true));
+
+            await axios({
+                method: "POST",
+                url: APIUrls.facebookLogin, //Link to https://developers.facebook.com/
+                data: {
+                    accessToken: response.accessToken,
+                    userID: response.userID
+                },
+            }).then(response => {
+                dispatch(socialLogin(response.data));
+            });
+
+            await dispatch(toggleIsFetching(false));
+
+        } catch (e) {
+            await dispatch(toggleIsFetching(false));
+        }
     };
 
     return (
@@ -216,7 +236,7 @@ const Login = () => {
                             <FacebookLogin
                                 appId={socialAuth.REACT_APP_FACEBOOK_APP_ID}
                                 autoLoad={false}
-                                fields="name,email,picture"
+                                fields="name,email"
                                 callback={responseFacebook}
                                 cssClass={classes.facebookBtn}
                                 textButton={<span>Facebook Log in</span>}
