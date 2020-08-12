@@ -3,9 +3,9 @@ import { makeStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles((theme) => ({
     gridRoot: {
         display: 'flex',
-        flexGrow: 1,
+        // flexGrow: 1,
         justifyContent: 'space-between',
-        flexWrap: 'nowrap'
+        flexWrap: 'wrap'
     },
     facebookBtn: {
         backgroundColor: '#395697 !important',
@@ -22,7 +22,10 @@ const useStyles = makeStyles((theme) => ({
         fontWeight: 500,
         fontFamily: 'Roboto, sans-serif',
         lineHeight: 1.95,
-        cursor:'pointer'
+        cursor:'pointer',
+        whiteSpace: 'nowrap',
+        overflow:'hidden',
+        textOverflow: 'ellipsis',
     },
     paper: {
         marginTop: theme.spacing(4),
@@ -38,7 +41,11 @@ const useStyles = makeStyles((theme) => ({
         fontWeight: 'bold'
     },
     google: {
-        whiteSpace:'nowrap'
+        whiteSpace: 'nowrap',
+        overflow:'hidden',
+        textOverflow: 'ellipsis',
+        width: '100% ',
+        marginRight: '0 !important'
     },
     avatar: {
         margin: theme.spacing(1),

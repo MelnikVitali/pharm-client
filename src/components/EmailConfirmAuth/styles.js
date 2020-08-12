@@ -15,6 +15,10 @@ const useStyles = makeStyles((theme) => ({
         color: '#3F51B5'
     },
     btn: {
+        margin: '1rem !important',
+        whiteSpace: 'nowrap',
+        overflow:'hidden',
+        textOverflow: 'ellipsis',
         "&:hover": {
             color: '#fff !important'
         }
@@ -32,9 +36,6 @@ const useStyles = makeStyles((theme) => ({
     textLeft: {
         textAlign: 'left'
     },
-    btnMarginLeft:{
-        marginLeft: theme.spacing(2)
-    }
 }));
 
 export default useStyles;

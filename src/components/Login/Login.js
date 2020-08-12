@@ -203,22 +203,23 @@ const Login = () => {
                     </Typography>
 
                     <Grid container justify='space-between' spacing={2} className={classes.gridRoot}>
-                        <Grid item xs={12}>
+                        <Grid item xs={6} sm={6}>
                             <GoogleLogin
                                 clientId={socialAuth.REACT_APP_GOOGLE_CLIENT_ID}
-                                buttonText="Login with Google"
+                                buttonText="Google Log in"
                                 onSuccess={responseSuccessGoogle}
                                 onFailure={responseErrorGoogle}
                                 className={classes.google}
                             />
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid item xs={6} sm={6}>
                             <FacebookLogin
                                 appId={socialAuth.REACT_APP_FACEBOOK_APP_ID}
                                 autoLoad={false}
                                 fields="name,email,picture"
                                 callback={responseFacebook}
                                 cssClass={classes.facebookBtn}
+                                textButton={<span>Facebook Log in</span>}
                                 icon={< FacebookIcon />}
                             />
                         </Grid>

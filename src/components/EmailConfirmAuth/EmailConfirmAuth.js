@@ -104,7 +104,7 @@ const EmailConfirmAuth = props => {
                             variant="contained"
                             component={Link}
                             fontSize="large"
-                            className={clsx(classes.btn, classes.btnMarginLeft)}
+                            className={clsx(classes.btn)}
                             onClick={handleClick}
                         >
                             Отправить письмо повторно
