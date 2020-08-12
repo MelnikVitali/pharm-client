@@ -17,10 +17,11 @@ export const getImages = () => async dispatch => {
         await dispatch(toggleIsFetching(false));
 
         const images = res.data.map(image => {
+            console.log('image', image);
             return {
                 img: `data:image/webp;base64,${image.base64}`,
                 id: image._id,
-                imageName: image.imageName,
+                imageName: image.name,
                 originalName: image.originalName
             }
         })

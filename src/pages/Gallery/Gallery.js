@@ -32,7 +32,8 @@ import useStyles from './style';
 const initialState = {
     open: false,
     currentImg: '',
-    currentImgId: ''
+    currentImgId: '',
+    imageName:''
 };
 
 const Gallery = ({ history }) => {
@@ -66,7 +67,7 @@ const Gallery = ({ history }) => {
             open: false,
             currentImg: '',
             currentImgId: '',
-            originalName: ''
+            imageName: ''
         });
     }
 
@@ -76,7 +77,7 @@ const Gallery = ({ history }) => {
             open: true,
             currentImg: img,
             currentImgId: id,
-            originalName: name
+            imageName: name
         });
     };
 
@@ -114,7 +115,7 @@ const Gallery = ({ history }) => {
                                         actionIcon={
                                             <IconButton
                                                 className={classes.icon}
-                                                onClick={() => handleClickOpen(tile.img, tile.id, tile.originalName)}
+                                                onClick={() => handleClickOpen(tile.img, tile.id, tile.imageName)}
                                             >
                                                 <ZoomIn className={classes.zoom} />
                                             </IconButton>
@@ -130,7 +131,7 @@ const Gallery = ({ history }) => {
                             onClose={handleClose}
                             aria-labelledby="responsive-dialog-title"
                         >
-                            <DialogTitle className={classes.title}>{state.originalName}</DialogTitle>
+                            <DialogTitle className={classes.title}>{state.imageName}</DialogTitle>
                             <DialogContent>
                                 <img
                                     src={state.currentImg}
