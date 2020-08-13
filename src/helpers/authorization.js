@@ -61,6 +61,7 @@ export async function resetTokenAndReattemptRequest(error) {
             const currentTime = Date.now() / 1000;
 
             if (cookieDecoded.exp < currentTime) {
+                console.error('error: Token expired')
                 deleteTokensAndAuthBearerTokenAndPushLogIn();
 
                 return Promise.reject(error);
