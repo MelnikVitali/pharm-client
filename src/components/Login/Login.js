@@ -79,11 +79,7 @@ const Login = () => {
                     .min(6, 'Пароль должен состоять не менее чем из 6 символов')
                     .required('Укажите пароль'),
             }),
-            onSubmit: fields => {
-                dispatch(clearErrors());
-
-                return dispatch(loginUser(fields));
-            }
+            onSubmit: fields => dispatch(loginUser(fields))
         });
 
         const onFocus = () => {

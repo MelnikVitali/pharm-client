@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
         flex: '1 0 auto',
     },
     gridList: {
-        width: 550,
+        width: 650,
         height: 450,
         // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
         transform: 'translateZ(0)',

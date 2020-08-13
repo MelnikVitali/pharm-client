@@ -1,3 +1,41 @@
+Project:
+--------
+Final project DAN.IT "Pharm-client"
+
+Author:
+-------
+Vitaliy Melnik
+
+Technology used:
+---------------
+- React
+- Redux
+- Redux-thunk
+- React and Redux Hooks
+- Material-UI
+- Formik and Yup
+- axios
+- react-toastify
+- react-router-dom
+- material-ui-dropzone
+- query-string
+- react-facebook-login
+- react-google-login
+- react-helmet
+- clsx
+
+Proxy for backend:
+------------------
+file static.json
+-----------------
+    {
+     target: 'http://localhost:5000',
+     changeOrigin: true,
+     pathRewrite: {
+        "^/api": "/", // rewrite path
+    }
+------------------------------------   
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
