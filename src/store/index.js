@@ -24,6 +24,7 @@ axios.interceptors.response.use((response) => {
     const { status } = error.response;
     const originalRequest = error.config;
     let tokenData = null;
+    let getTokenStorage = null;
 
     console.log('test 1');
 
@@ -34,7 +35,10 @@ axios.interceptors.response.use((response) => {
     }
 
     if (error.response && status === 401) {
-        const getTokenStorage = STORAGE.getItem('accessToken');
+        getTokenStorage = STORAGE.getItem('accessToken');
+
+        console.log('getTokenStorage', getTokenStorage);
+
         console.log('test 3');
         if (getTokenStorage) {
             const currentTime = Date.now() / 1000;
