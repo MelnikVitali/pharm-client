@@ -26,14 +26,22 @@ Technology used:
 
 Proxy for backend:
 ------------------
-file static.json
+- file ==> /src/setupProxy.js
 -----------------
-    {
-     target: 'http://localhost:5000',
-     changeOrigin: true,
-     pathRewrite: {
-        "^/api": "/", // rewrite path
-    }
+const { createProxyMiddleware } = require('http-proxy-middleware');
+
+module.exports = function(app) {
+    app.use(
+        '/api/**',
+        createProxyMiddleware({
+            target: 'http://localhost:5000',
+            changeOrigin: true,
+            pathRewrite: {
+                "^/api": "/", // rewrite path
+            },
+        })
+    );
+};
 ------------------------------------   
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

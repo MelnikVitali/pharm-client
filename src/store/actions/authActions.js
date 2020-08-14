@@ -1,15 +1,11 @@
 import axios from 'axios';
-import js_cookie from 'js-cookie';
 
 import STORAGE from '../../helpers/storage';
-import { setAuthBearerToken } from '../../helpers/authorization';
+import { deleteTokensAndAuthBearerTokenAndPushLogIn, setAuthBearerToken } from '../../helpers/authorization';
 
 import * as actions from './types';
 
-import { history } from '../../helpers/history';
-
 import { APIUrls } from '../../configs/APIUrls';
-import { RoutesUrls } from '../../configs/RoutesUrls';
 
 import { toggleIsFetching } from './toggleIsFetchingActions';
 
@@ -43,12 +39,18 @@ export const loginUser = (loginData) => async dispatch => {
 
         const accessToken = res.data.accessToken;
 
-        await STORAGE.setItem('accessToken', accessToken);
+        STORAGE.setItem('accessToken', accessToken);
 
-        await setAuthBearerToken(accessToken);
+        setAuthBearerToken(accessToken);
 
         const decoded = STORAGE.jwtDecode(accessToken);
-        dispatch(setCurrentUser(decoded));
+
+        dispatch(setCurrentUser({
+            userId: decoded.userId,
+            deviceId: decoded.deviceId,
+            name: decoded.name
+
+        }));
 
     } catch (err) {
         await dispatch(toggleIsFetching(false));
@@ -190,20 +192,12 @@ export const logoutUser = (userIdData) => async dispatch => {
             dispatch(toggleIsFetching(false));
         }
 
-        await STORAGE.removeItem('accessToken');
-
-        await js_cookie.remove('refreshToken');
-
-        await setAuthBearerToken(null);
-
-        await history.push(RoutesUrls.login);
+        deleteTokensAndAuthBearerTokenAndPushLogIn();
 
         dispatch(setCurrentUser(null));
 
     } catch (err) {
         dispatch(toggleIsFetching(false));
-
-        console.error('Error logout user', err)
     }
 
 };

@@ -1,9 +1,9 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 
-import Login from './components/Login';
+import Login from './pages/Login';
 import Logout from './components/Logout';
-import Register from './components/Register';
+import Register from './pages/Register';
 import ForgotPassword from './components/ForgotPassword';
 import ResetPassword from './components/ResetPassword';
 import EmailConfirmAuth from './components/EmailConfirmAuth/EmailConfirmAuth';

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -28,7 +29,7 @@ const validationSchema = Yup.object({
         .required('Укажите текст'),
 });
 
-const EditPost = props => {
+const EditPost = React.memo(props => {
     const classes = useStyles();
 
     const dispatch = useDispatch();
@@ -41,7 +42,7 @@ const EditPost = props => {
 
     useEffect(() => {
         dispatch(getPost(id));
-    }, [ dispatch, id ]);
+    }, []);
 
     const onSubmit = values => {
         dispatch(editPost(id,
@@ -153,6 +154,6 @@ const EditPost = props => {
             <Copyright />
         </>
     );
-};
+});
 
 export default EditPost;
