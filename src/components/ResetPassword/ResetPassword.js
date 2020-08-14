@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -28,7 +29,7 @@ import Preloader from '../Preloader';
 
 import useStyles from './style';
 
-const ResetPassword = (props) => {
+const ResetPassword = React.memo((props) => {
     const classes = useStyles();
 
     const dispatch = useDispatch();
@@ -44,7 +45,7 @@ const ResetPassword = (props) => {
     useEffect(() => {
         dispatch(clearErrors());
         dispatch(clearSuccess());
-    }, [ dispatch ]);
+    }, []);
 
     const {
         handleSubmit, handleChange,
@@ -203,7 +204,7 @@ const ResetPassword = (props) => {
                             component={Link}
                             to={RoutesUrls.homePage}
                         >
-                         LogIn
+                            LogIn
                         </Button>
 
                     </form>
@@ -212,6 +213,6 @@ const ResetPassword = (props) => {
             </Container>
         </>
     );
-};
+});
 
 export default ResetPassword;

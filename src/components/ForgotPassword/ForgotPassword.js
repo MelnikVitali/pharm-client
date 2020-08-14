@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -26,7 +27,7 @@ import Copyright from '../Copyright';
 
 import useStyles from './style';
 
-const ForgotPassword = () => {
+const ForgotPassword = React.memo(() => {
     const classes = useStyles();
 
     const dispatch = useDispatch();
@@ -38,8 +39,7 @@ const ForgotPassword = () => {
     useEffect(() => {
         dispatch(clearErrors());
         dispatch(clearSuccess());
-
-    }, [ dispatch ]);
+    }, []);
 
     const {
         handleSubmit, handleChange,
@@ -148,6 +148,6 @@ const ForgotPassword = () => {
             <Copyright />
         </>
     );
-};
+});
 
 export default ForgotPassword;

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -23,13 +24,15 @@ import { clearSuccess } from '../../store/actions/successActions';
 
 import { RoutesUrls } from '../../configs/RoutesUrls';
 
-import Preloader from '../Preloader';
-import Navbar from '../Navbar';
-import Copyright from '../Copyright';
+import Preloader from '../../components/Preloader';
+import Navbar from '../../components/Navbar';
+import Copyright from '../../components/Copyright';
+
+import Helmet from 'react-helmet';
 
 import useStyles from './style';
 
-const Register = () => {
+const Register = React.memo(() => {
     const classes = useStyles();
 
     const dispatch = useDispatch();
@@ -41,7 +44,7 @@ const Register = () => {
     useEffect(() => {
         dispatch(clearErrors());
         dispatch(clearSuccess());
-    }, [ dispatch ]);
+    }, []);
 
     const {
         handleSubmit, handleChange,
@@ -93,8 +96,10 @@ const Register = () => {
     return (
         <>
             {isFetching ? <Preloader /> : null}
-
             <Navbar />
+            <Helmet>
+                <title>Страница регистрации</title>
+            </Helmet>
             <Container component="main" maxWidth="xs" className={classes.root}>
 
                 <div className={classes.paper}>
@@ -251,6 +256,6 @@ const Register = () => {
             <Copyright />
         </>
     );
-};
+});
 
 export default Register;

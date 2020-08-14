@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Helmet from 'react-helmet';
@@ -18,7 +19,7 @@ import { RoutesUrls } from '../../configs/RoutesUrls';
 
 import useStyles from './style';
 
-const Posts = ({ history }) => {
+const Posts = React.memo(({ history }) => {
     const classes = useStyles();
     const dispatch = useDispatch();
 
@@ -28,12 +29,12 @@ const Posts = ({ history }) => {
     const storageToken = STORAGE.getItem('accessToken');
 
     useEffect(() => {
-        if (!storageToken) {
+        if (storageToken) {
+            dispatch(getPosts());
+        } else {
             history.push(RoutesUrls.login);
         }
-
-        dispatch(getPosts());
-    }, [ dispatch, storageToken, history ]);
+    }, []);
 
     return (
         <>
@@ -60,6 +61,6 @@ const Posts = ({ history }) => {
             <Copyright />
         </>
     );
-};
+});
 
 export default Posts;

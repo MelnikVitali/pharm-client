@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Helmet from "react-helmet";
@@ -23,7 +24,7 @@ import STORAGE from '../../helpers/storage';
 
 import useStyles from './styles';
 
-const AddPost = props => {
+const AddPost = React.memo(props => {
     const classes = useStyles();
 
     const dispatch = useDispatch();
@@ -32,11 +33,12 @@ const AddPost = props => {
     const isFetching = useSelector(store => store.toggleIsFetchingReducer.isFetching);
 
     const storageToken = STORAGE.getItem('accessToken');
+
     useEffect(() => {
         if (!storageToken) {
             history.push(RoutesUrls.login);
         }
-    }, [ history, storageToken ]);
+    }, []);
 
     const {
         handleSubmit, handleChange,
@@ -131,6 +133,6 @@ const AddPost = props => {
             <Copyright />
         </>
     );
-};
+});
 
 export default AddPost;

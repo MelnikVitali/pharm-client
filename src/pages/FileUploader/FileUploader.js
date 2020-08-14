@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import Helmet from 'react-helmet';
 import axios from 'axios';
@@ -14,10 +15,12 @@ import STORAGE from '../../helpers/storage';
 import Preloader from '../../components/Preloader';
 import Navbar from '../../components/Navbar';
 import Copyright from '../../components/Copyright';
-import Login from '../../components/Login';
+
+import { APIUrls } from '../../configs/APIUrls';
+import { history } from '../../helpers/history';
+import { RoutesUrls } from '../../configs/RoutesUrls';
 
 import useStyles from './styles';
-import { APIUrls } from '../../configs/APIUrls';
 
 const acceptedFiles = [
     'image/jpeg',
@@ -40,7 +43,7 @@ const initialState = {
     reason: 'All files with such names already exist!'
 };
 
-const FileUploader = () => {
+const FileUploader = React.memo(() => {
     const classes = useStyles();
 
     const dispatch = useDispatch();
@@ -50,6 +53,12 @@ const FileUploader = () => {
     const [ state, setState ] = useState(initialState);
 
     const storageToken = STORAGE.getItem('accessToken');
+
+    useEffect(() => {
+        if (!storageToken) {
+            history.push(RoutesUrls.login);
+        }
+    }, []);
 
     const handleOpen = () => {
         setState({
@@ -107,78 +116,73 @@ const FileUploader = () => {
     return (
         <>
             {isFetching ? <Preloader /> : null}
-            {!storageToken
-                ? <Login />
-                : (<>
-                    <Navbar />
-                    <Container component='main' maxWidth='lg' className={classes.root}>
-                        <Helmet>
-                            <title>Загрузить файлы</title>
-                        </Helmet>
+            <Navbar />
+            <Container component='main' maxWidth='lg' className={classes.root}>
+                <Helmet>
+                    <title>Загрузить файлы</title>
+                </Helmet>
 
-                        <Typography variant="h3" align='center'>
-                            Upload Image and File
-                        </Typography>
+                <Typography variant="h3" align='center'>
+                    Upload Image and File
+                </Typography>
 
-                        <Box display="flex" justifyContent="center">
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                size="medium"
-                                onClick={handleOpen}
-                                startIcon={<CloudUploadIcon />}
-                            >
-                                Add files
-                            </Button>
-                        </Box>
+                <Box display="flex" justifyContent="center">
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        size="medium"
+                        onClick={handleOpen}
+                        startIcon={<CloudUploadIcon />}
+                    >
+                        Add files
+                    </Button>
+                </Box>
 
-                        <DropzoneDialog
-                            open={state.open}
-                            onSave={handleSave}
-                            filesLimit={4}
-                            acceptedFiles={acceptedFiles}
-                            showPreviews={true}
-                            maxFileSize={3000000}
-                            onClose={handleClose}
-                            showFileNames={true}
-                            showFileNamesInPreview={true}
-                            dialogTitle={'Upload image and file'}
-                            dropzoneText={'Drag and drop a file  and image here or click'}
-                        />
+                <DropzoneDialog
+                    open={state.open}
+                    onSave={handleSave}
+                    filesLimit={4}
+                    acceptedFiles={acceptedFiles}
+                    showPreviews={true}
+                    maxFileSize={3000000}
+                    onClose={handleClose}
+                    showFileNames={true}
+                    showFileNamesInPreview={true}
+                    dialogTitle={'Upload image and file'}
+                    dropzoneText={'Drag and drop a file  and image here or click'}
+                />
 
-                        {(state.serverError !== '')
-                            ? <div className={classes.root}>
-                                <Alert severity="error">
-                                    <AlertTitle>Error</AlertTitle>
-                                    Server error — <strong>{state.serverError}</strong>
-                                </Alert>
-                            </div>
-                            : null
-                        }
+                {(state.serverError !== '')
+                    ? <div className={classes.root}>
+                        <Alert severity="error">
+                            <AlertTitle>Error</AlertTitle>
+                            Server error — <strong>{state.serverError}</strong>
+                        </Alert>
+                    </div>
+                    : null
+                }
 
-                        {(state.serverResponse)
-                            ? <div className={classes.root}>
-                                <Alert severity="success">
-                                    <AlertTitle>Success</AlertTitle>
-                                    <p><strong>Saved files — </strong>{state.saved}</p>
+                {(state.serverResponse)
+                    ? <div className={classes.root}>
+                        <Alert severity="success">
+                            <AlertTitle>Success</AlertTitle>
+                            <p><strong>Saved files — </strong>{state.saved}</p>
 
-                                    {(state.rejected !== '')
-                                        ? <>
-                                            <p><strong>Rejected files — </strong>{state.rejected}</p>
-                                            <p><strong>Reason for rejection — </strong>{state.reason}</p>
-                                        </>
-                                        : null
-                                    }
-                                </Alert>
-                            </div>
-                            : null
-                        }
-                    </Container>
-                    <Copyright />
-                </>)
-            }
+                            {(state.rejected !== '')
+                                ? <>
+                                    <p><strong>Rejected files — </strong>{state.rejected}</p>
+                                    <p><strong>Reason for rejection — </strong>{state.reason}</p>
+                                </>
+                                : null
+                            }
+                        </Alert>
+                    </div>
+                    : null
+                }
+            </Container>
+            <Copyright />
         </>
     );
-};
+});
 
 export default FileUploader;

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -15,7 +16,7 @@ import Copyright from '../../components/Copyright';
 
 import useStyles from './style';
 
-const PostPage = (props) => {
+const PostPage = React.memo((props) => {
     const classes = useStyles();
 
     const dispatch = useDispatch();
@@ -27,7 +28,7 @@ const PostPage = (props) => {
 
     useEffect(() => {
         dispatch(getPost(id));
-    }, [ dispatch, id ]);
+    }, []);
 
     const onDeletePost = () => {
         dispatch(deletePost(id, history));
@@ -90,6 +91,6 @@ const PostPage = (props) => {
             <Copyright />
         </>
     );
-};
+});
 
 export default PostPage;

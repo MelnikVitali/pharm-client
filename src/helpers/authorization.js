@@ -13,59 +13,60 @@ const getRefreshTokenCookie = js_cookie.get('refreshToken');
 let isAlreadyFetchingAccessToken = false;
 let subscribers = [];
 
-export function setAuthBearerToken(token) {
+export const setAuthBearerToken = (token) => {
     if (token) {
         axios.defaults.headers.common.Authorization = `Bearer ${token}`;
     } else {
         delete axios.defaults.headers.common.Authorization;
     }
-}
+};
 
-export function deleteTokensAndAuthBearerTokenAndPushLogIn() {
+export const deleteTokensAndAuthBearerTokenAndPushLogIn = () => {
     STORAGE.removeItem('accessToken');
-
-    js_cookie.remove('refreshToken');
 
     setAuthBearerToken(null);
 
     history.push(RoutesUrls.login);
-}
+};
 
-export function isTokenExpiredError() {
+export const isAccessTokenExpiredError = () => {
     const accessTokenExpires = getTokenStorage && STORAGE.jwtDecode(getTokenStorage);
+    const currentTime = Date.now() / 1000;
 
-    const getTime = new Date().getTime() / 1000;
+    return accessTokenExpires.exp <= currentTime;
+};
 
-    return accessTokenExpires.exp <= getTime;
-}
+export const isCookieTokenExpiredError = () => {
+    const cookieDecoded = getRefreshTokenCookie && STORAGE.jwtDecode(getRefreshTokenCookie);
+    const currentTime = Date.now() / 1000;
 
-function onAccessTokenFetched(accessToken) {
+    return cookieDecoded.exp <= currentTime;
+};
+
+const onAccessTokenFetched = (accessToken) => {
     subscribers.forEach(callback => callback(accessToken));
     subscribers = [];
-}
+};
 
-function addSubscriber(callback) {
+const addSubscriber = (callback) => {
     subscribers.push(callback);
-}
+};
 
-export async function resetTokenAndReattemptRequest(error) {
+export const resetTokenAndReattemptRequest = async (error) => {
     try {
         const { response: errorResponse } = error;
 
         if (!getRefreshTokenCookie) {
+            console.log('test');
             deleteTokensAndAuthBearerTokenAndPushLogIn();
 
             return Promise.reject(error);
-        } else if (getRefreshTokenCookie) {
-            const cookieDecoded = STORAGE.jwtDecode(getRefreshTokenCookie);
-            const currentTime = Date.now() / 1000;
 
-            if (cookieDecoded.exp < currentTime) {
-                console.error('error: Token expired')
-                deleteTokensAndAuthBearerTokenAndPushLogIn();
+        } else if (isCookieTokenExpiredError()) {
 
-                return Promise.reject(error);
-            }
+            history.push(RoutesUrls.logout);
+
+            return Promise.reject(error);
         }
 
         const retryOriginalRequest = new Promise((resolve) => {
@@ -94,7 +95,7 @@ export async function resetTokenAndReattemptRequest(error) {
                     isAlreadyFetchingAccessToken = false;
                 })
                 .catch(error => {
-                    deleteTokensAndAuthBearerTokenAndPushLogIn();
+                    history.push(RoutesUrls.logout);
 
                     return Promise.reject(error);
                 });
@@ -102,7 +103,7 @@ export async function resetTokenAndReattemptRequest(error) {
 
         return retryOriginalRequest;
     } catch (err) {
-        deleteTokensAndAuthBearerTokenAndPushLogIn();
+        history.push(RoutesUrls.logout);
 
         return Promise.reject(err);
     }

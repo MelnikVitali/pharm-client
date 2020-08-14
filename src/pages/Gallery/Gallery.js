@@ -21,6 +21,8 @@ import Preloader from '../../components/Preloader';
 import Navbar from '../../components/Navbar';
 import Copyright from '../../components/Copyright';
 
+import { history } from '../../helpers/history';
+
 import { deleteImage, getImages } from '../../store/actions/imageAction';
 
 import { RoutesUrls } from '../../configs/RoutesUrls';
@@ -33,10 +35,10 @@ const initialState = {
     open: false,
     currentImg: '',
     currentImgId: '',
-    imageName:''
+    imageName: ''
 };
 
-const Gallery = ({ history }) => {
+const Gallery = React.memo(() => {
     const classes = useStyles();
 
     const dispatch = useDispatch();
@@ -52,12 +54,12 @@ const Gallery = ({ history }) => {
     const storageToken = STORAGE.getItem('accessToken');
 
     useEffect(() => {
-        if (!storageToken) {
+        if (storageToken) {
+            dispatch(getImages());
+        } else {
             history.push(RoutesUrls.login);
         }
-
-        dispatch(getImages());
-    }, [ dispatch, storageToken, history ]);
+    }, []);
 
     const onDeleteImage = () => {
         dispatch(deleteImage(state.currentImgId));
@@ -161,6 +163,6 @@ const Gallery = ({ history }) => {
             <Copyright />
         </>
     );
-};
+});
 
 export default Gallery;
