@@ -41,17 +41,15 @@ axios.interceptors.response.use((response) => {
 
         console.log('test 3');
         if (getTokenStorage) {
-            const currentTime = Date.now() / 1000;
-
             tokenData = STORAGE.jwtDecode(getTokenStorage);
 
             console.log('test 4');
 
             console.log('accessTokenExpires.exp', tokenData.exp);
-            console.log('currentTime', currentTime);
+            console.log('currentTime',Date.now()/1000);
 
 
-            if (tokenData.exp <= currentTime) {
+            if (tokenData.exp * 1000 <= Date.now()) {
                 console.log('isAccessTokenExpiredError');
 
                 return resetTokenAndReattemptRequest(error);
@@ -86,7 +84,7 @@ axios.interceptors.response.use((response) => {
         default:
             break;
     }
-    console.log('test 6');
+    console.log('test 7');
 
     history.push(RoutesUrls.login);
 

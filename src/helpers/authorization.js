@@ -7,8 +7,8 @@ import { history } from './history';
 import { APIUrls } from '../configs/APIUrls';
 import { RoutesUrls } from '../configs/RoutesUrls';
 
-const getTokenStorage = STORAGE.getItem('accessToken');
-const getRefreshTokenCookie = js_cookie.get('refreshToken');
+// const getTokenStorage = STORAGE.getItem('accessToken');
+// const getRefreshTokenCookie = js_cookie.get('refreshToken');
 
 let isAlreadyFetchingAccessToken = false;
 let subscribers = [];
@@ -26,7 +26,7 @@ export const deleteTokensAndAuthBearerTokenAndPushLogIn = () => {
 
     setAuthBearerToken(null);
 
-   return  history.push(RoutesUrls.login);
+    return history.push(RoutesUrls.login);
 };
 
 // export const isAccessTokenExpiredError = () => {
@@ -56,8 +56,9 @@ export const resetTokenAndReattemptRequest = async (error) => {
     try {
         const { response: errorResponse } = error;
 
+        const getRefreshTokenCookie = js_cookie.get('refreshToken');
+
         const cookieDecoded = getRefreshTokenCookie && STORAGE.jwtDecode(getRefreshTokenCookie);
-        const currentTime = Date.now() / 1000;
 
         if (!getRefreshTokenCookie) {
             console.log('test');
@@ -65,8 +66,9 @@ export const resetTokenAndReattemptRequest = async (error) => {
 
             return Promise.reject(error);
 
-        } else if (cookieDecoded.exp <= currentTime) {
-            console.log('isCookieTokenExpiredError');
+        } else if (cookieDecoded.exp* 1000 <= Date.now()) {
+            console.error('refreshToken expired');
+
             history.push(RoutesUrls.logout);
 
             return Promise.reject(error);
