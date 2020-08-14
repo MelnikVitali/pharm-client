@@ -7,9 +7,6 @@ import { history } from './history';
 import { APIUrls } from '../configs/APIUrls';
 import { RoutesUrls } from '../configs/RoutesUrls';
 
-// const getTokenStorage = STORAGE.getItem('accessToken');
-// const getRefreshTokenCookie = js_cookie.get('refreshToken');
-
 let isAlreadyFetchingAccessToken = false;
 let subscribers = [];
 
@@ -24,24 +21,12 @@ export const setAuthBearerToken = (token) => {
 export const deleteTokensAndAuthBearerTokenAndPushLogIn = () => {
     STORAGE.removeItem('accessToken');
 
+    js_cookie.remove('refreshToken');
+
     setAuthBearerToken(null);
 
     return history.push(RoutesUrls.login);
 };
-
-// export const isAccessTokenExpiredError = () => {
-//     const accessTokenExpires = getTokenStorage && STORAGE.jwtDecode(getTokenStorage);
-//     const currentTime = Date.now() / 1000;
-//
-//     return accessTokenExpires.exp <= currentTime;
-// };
-
-// export const isCookieTokenExpiredError = () => {
-//     const cookieDecoded = getRefreshTokenCookie && STORAGE.jwtDecode(getRefreshTokenCookie);
-//     const currentTime = Date.now() / 1000;
-//
-//     return cookieDecoded.exp <= currentTime;
-// };
 
 const onAccessTokenFetched = (accessToken) => {
     subscribers.forEach(callback => callback(accessToken));
@@ -58,18 +43,8 @@ export const resetTokenAndReattemptRequest = async (error) => {
 
         const getRefreshTokenCookie = js_cookie.get('refreshToken');
 
-        const cookieDecoded = getRefreshTokenCookie && STORAGE.jwtDecode(getRefreshTokenCookie);
-
         if (!getRefreshTokenCookie) {
-            console.log('test');
             deleteTokensAndAuthBearerTokenAndPushLogIn();
-
-            return Promise.reject(error);
-
-        } else if (cookieDecoded.exp* 1000 <= Date.now()) {
-            console.error('refreshToken expired');
-
-            history.push(RoutesUrls.logout);
 
             return Promise.reject(error);
         }
@@ -85,25 +60,21 @@ export const resetTokenAndReattemptRequest = async (error) => {
         if (!isAlreadyFetchingAccessToken) {
             isAlreadyFetchingAccessToken = true;
 
-            await axios({
+            const response = await axios({
                 method: 'post',
                 url: APIUrls.refreshTokens
             })
-                .then(async res => {
-                    const newToken = res.data.accessToken;
 
-                    await setAuthBearerToken(newToken);
+            if (!response.data) {
+                return Promise.reject(error);
+            }
 
-                    await onAccessTokenFetched(newToken);
-                    STORAGE.setItem('accessToken', newToken);
+            const newToken = response.data.accessToken;
+            setAuthBearerToken(newToken);
+            onAccessTokenFetched(newToken);
+            STORAGE.setItem('accessToken', newToken);
 
-                    isAlreadyFetchingAccessToken = false;
-                })
-                .catch(error => {
-                    history.push(RoutesUrls.logout);
-
-                    return Promise.reject(error);
-                });
+            isAlreadyFetchingAccessToken = false;
         }
 
         return retryOriginalRequest;

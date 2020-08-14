@@ -11,7 +11,6 @@ import {
     deleteTokensAndAuthBearerTokenAndPushLogIn
 } from '../helpers/authorization';
 import { history } from '../helpers/history';
-import STORAGE from '../helpers/storage';
 
 import { APIUrls } from '../configs/APIUrls';
 import { RoutesUrls } from '../configs/RoutesUrls';
@@ -23,42 +22,16 @@ axios.interceptors.response.use((response) => {
 }, (error) => {
     const { status } = error.response;
     const originalRequest = error.config;
-    let tokenData = null;
-    let getTokenStorage = null;
-
     console.log('test 1');
 
-    if ((error.response && status === 401 && originalRequest.url === APIUrls.refreshTokens) ||
-        (error.response && status === 401 && originalRequest.url === APIUrls.logout)) {
+    if ((error.response && status === 401 && originalRequest.url === APIUrls.refreshTokens)) {
         console.log('test 2');
         return deleteTokensAndAuthBearerTokenAndPushLogIn();
     }
 
     if (error.response && status === 401) {
-        getTokenStorage = STORAGE.getItem('accessToken');
-
-        console.log('getTokenStorage', getTokenStorage);
-
         console.log('test 3');
-        if (getTokenStorage) {
-            tokenData = STORAGE.jwtDecode(getTokenStorage);
-
-            console.log('test 4');
-
-            console.log('accessTokenExpires.exp', tokenData.exp);
-            console.log('currentTime',Date.now()/1000);
-
-
-            if (tokenData.exp * 1000 <= Date.now()) {
-                console.log('isAccessTokenExpiredError');
-
-                return resetTokenAndReattemptRequest(error);
-            }
-            console.log('test 5');
-        } else {
-            console.log('test 6');
-            return deleteTokensAndAuthBearerTokenAndPushLogIn();
-        }
+        return resetTokenAndReattemptRequest(error);
     }
 
     switch (status) {
@@ -84,7 +57,7 @@ axios.interceptors.response.use((response) => {
         default:
             break;
     }
-    console.log('test 7');
+    console.log('test 4');
 
     history.push(RoutesUrls.login);
 
