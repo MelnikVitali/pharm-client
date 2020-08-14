@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
@@ -48,6 +48,8 @@ const Login = React.memo(() => {
     const classes = useStyles();
 
     const dispatch = useDispatch();
+
+    const [ disabledBtn, setDisabledBtn ] = useState(false);
 
     const errorsServer = useSelector(store => store.errorReducer);
     const user = useSelector(store => store.authReducer.user);
@@ -113,7 +115,7 @@ const Login = React.memo(() => {
         } catch (err) {
             await dispatch(toggleIsFetching(false));
 
-            dispatch({
+            return dispatch({
                 type: actions.ERROR,
                 payload: err.response.data
             });
@@ -121,12 +123,9 @@ const Login = React.memo(() => {
 
     };
 
-    const responseErrorGoogle = (response) => {
-        console.log(response);
-    };
-
     const responseFacebook = async (response) => {
         try {
+            setDisabledBtn(true);
             await dispatch(toggleIsFetching(true));
 
             const res = await axios({
@@ -138,14 +137,20 @@ const Login = React.memo(() => {
                 },
             });
 
+            if (res) {
+                setDisabledBtn(false);
+            }
+
             await dispatch(socialLogin(res.data));
 
             await dispatch(toggleIsFetching(false));
 
         } catch (err) {
+            setDisabledBtn(false);
+
             await dispatch(toggleIsFetching(false));
 
-            dispatch({
+            return dispatch({
                 type: actions.ERROR,
                 payload: err.response.data
             });
@@ -244,12 +249,12 @@ const Login = React.memo(() => {
                                 clientId={socialAuth.REACT_APP_GOOGLE_CLIENT_ID}
                                 buttonText="Google Log in"
                                 onSuccess={responseSuccessGoogle}
-                                onFailure={responseErrorGoogle}
                                 className={classes.google}
                             />
                         </Grid>
                         <Grid item xs={6} sm={6}>
                             <FacebookLogin
+                                disabled={disabledBtn}
                                 appId={socialAuth.REACT_APP_FACEBOOK_APP_ID}
                                 autoLoad={false}
                                 fields="name,email,picture"
