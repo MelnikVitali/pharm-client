@@ -15,11 +15,13 @@ import { getPosts } from '../../store/actions/postActions';
 
 import STORAGE from '../../helpers/storage';
 
+import { history } from '../../helpers/history';
+
 import { RoutesUrls } from '../../configs/RoutesUrls';
 
 import useStyles from './style';
 
-const Posts = React.memo(({ history }) => {
+const Posts = React.memo(() => {
     const classes = useStyles();
     const dispatch = useDispatch();
 

@@ -26,7 +26,7 @@ export const deleteTokensAndAuthBearerTokenAndPushLogIn = () => {
 
     setAuthBearerToken(null);
 
-    history.push(RoutesUrls.login);
+   return  history.push(RoutesUrls.login);
 };
 
 export const isAccessTokenExpiredError = () => {

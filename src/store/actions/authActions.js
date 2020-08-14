@@ -19,10 +19,10 @@ export const socialLogin = (loginData) => async dispatch => {
         await setAuthBearerToken(accessToken);
 
         const decoded = STORAGE.jwtDecode(accessToken);
-        dispatch(setCurrentUser(decoded));
+        return  dispatch(setCurrentUser(decoded));
 
     } catch (err) {
-        dispatch({
+        return  dispatch({
             type: actions.ERROR,
             payload: err.response.data
         });
@@ -45,7 +45,7 @@ export const loginUser = (loginData) => async dispatch => {
 
         const decoded = STORAGE.jwtDecode(accessToken);
 
-        dispatch(setCurrentUser({
+        return  dispatch(setCurrentUser({
             userId: decoded.userId,
             deviceId: decoded.deviceId,
             name: decoded.name
@@ -55,7 +55,7 @@ export const loginUser = (loginData) => async dispatch => {
     } catch (err) {
         await dispatch(toggleIsFetching(false));
 
-        dispatch({
+        return   dispatch({
             type: actions.ERROR,
             payload: err.response.data
         });
@@ -72,7 +72,7 @@ export const forgotPassword = (forgotData) => async dispatch => {
             dispatch(toggleIsFetching(false));
         }
 
-        dispatch({
+        return   dispatch({
             type: actions.SUCCESS,
             payload: res.data
         });
@@ -80,7 +80,7 @@ export const forgotPassword = (forgotData) => async dispatch => {
     } catch (err) {
         await dispatch(toggleIsFetching(false));
 
-        dispatch({
+        return  dispatch({
             type: actions.ERROR,
             payload: err.response.data
         });
@@ -103,7 +103,7 @@ export const resetPassword = (resetData) => async dispatch => {
     } catch (err) {
         await dispatch(toggleIsFetching(false));
 
-        dispatch({
+        return  dispatch({
             type: actions.ERROR,
             payload: err.response.data
         });
@@ -125,7 +125,7 @@ export const registerUser = registerData => async dispatch => {
     } catch (err) {
         await dispatch(toggleIsFetching(false));
 
-        dispatch({
+        return  dispatch({
             type: actions.ERROR,
             payload: err.response.data
         });
@@ -142,7 +142,7 @@ export const confirmEmail = (tokenData) => async dispatch => {
             dispatch(toggleIsFetching(false));
         }
 
-        dispatch({
+        return  dispatch({
             type: actions.SUCCESS,
             payload: res.data
         });
@@ -150,7 +150,7 @@ export const confirmEmail = (tokenData) => async dispatch => {
     } catch (err) {
         dispatch(toggleIsFetching(false));
 
-        dispatch({
+        return dispatch({
             type: actions.ERROR,
             payload: err.response.data
         });
@@ -167,7 +167,7 @@ export const repeatEmailActivation = (token, email) => async dispatch => {
             dispatch(toggleIsFetching(false));
         }
 
-        dispatch({
+        return  dispatch({
             type: actions.SUCCESS,
             payload: res.data
         });
@@ -175,7 +175,7 @@ export const repeatEmailActivation = (token, email) => async dispatch => {
     } catch (err) {
         dispatch(toggleIsFetching(false));
 
-        dispatch({
+        return dispatch({
             type: actions.ERROR,
             payload: err.response.data
         });
@@ -194,7 +194,7 @@ export const logoutUser = (userIdData) => async dispatch => {
 
         deleteTokensAndAuthBearerTokenAndPushLogIn();
 
-        dispatch(setCurrentUser(null));
+       return  dispatch(setCurrentUser(null));
 
     } catch (err) {
         dispatch(toggleIsFetching(false));
