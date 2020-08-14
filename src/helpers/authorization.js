@@ -29,19 +29,19 @@ export const deleteTokensAndAuthBearerTokenAndPushLogIn = () => {
    return  history.push(RoutesUrls.login);
 };
 
-export const isAccessTokenExpiredError = () => {
-    const accessTokenExpires = getTokenStorage && STORAGE.jwtDecode(getTokenStorage);
-    const currentTime = Date.now() / 1000;
+// export const isAccessTokenExpiredError = () => {
+//     const accessTokenExpires = getTokenStorage && STORAGE.jwtDecode(getTokenStorage);
+//     const currentTime = Date.now() / 1000;
+//
+//     return accessTokenExpires.exp <= currentTime;
+// };
 
-    return accessTokenExpires.exp <= currentTime;
-};
-
-export const isCookieTokenExpiredError = () => {
-    const cookieDecoded = getRefreshTokenCookie && STORAGE.jwtDecode(getRefreshTokenCookie);
-    const currentTime = Date.now() / 1000;
-
-    return cookieDecoded.exp <= currentTime;
-};
+// export const isCookieTokenExpiredError = () => {
+//     const cookieDecoded = getRefreshTokenCookie && STORAGE.jwtDecode(getRefreshTokenCookie);
+//     const currentTime = Date.now() / 1000;
+//
+//     return cookieDecoded.exp <= currentTime;
+// };
 
 const onAccessTokenFetched = (accessToken) => {
     subscribers.forEach(callback => callback(accessToken));
@@ -56,14 +56,17 @@ export const resetTokenAndReattemptRequest = async (error) => {
     try {
         const { response: errorResponse } = error;
 
+        const cookieDecoded = getRefreshTokenCookie && STORAGE.jwtDecode(getRefreshTokenCookie);
+        const currentTime = Date.now() / 1000;
+
         if (!getRefreshTokenCookie) {
             console.log('test');
             deleteTokensAndAuthBearerTokenAndPushLogIn();
 
             return Promise.reject(error);
 
-        } else if (isCookieTokenExpiredError()) {
-
+        } else if (cookieDecoded.exp <= currentTime) {
+            console.log('isCookieTokenExpiredError');
             history.push(RoutesUrls.logout);
 
             return Promise.reject(error);

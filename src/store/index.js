@@ -8,7 +8,6 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import {
     resetTokenAndReattemptRequest,
-    isAccessTokenExpiredError,
     deleteTokensAndAuthBearerTokenAndPushLogIn
 } from '../helpers/authorization';
 import { history } from '../helpers/history';
@@ -37,14 +36,17 @@ axios.interceptors.response.use((response) => {
         const getTokenStorage = STORAGE.getItem('accessToken');
         console.log('test 3');
         if (getTokenStorage) {
+            const accessTokenExpires = getTokenStorage && STORAGE.jwtDecode(getTokenStorage);
+            const currentTime = Date.now() / 1000;
+
             console.log('test 4');
 
-            console.log('isAccessTokenExpiredError', isAccessTokenExpiredError());
-            if (isAccessTokenExpiredError()) {
-                console.log('test 5');
+            if (accessTokenExpires.exp <= currentTime) {
+                console.log('isAccessTokenExpiredError');
+
                 return resetTokenAndReattemptRequest(error);
             }
-
+            console.log('test 5');
         } else {
             console.log('test 6');
             return deleteTokensAndAuthBearerTokenAndPushLogIn();
