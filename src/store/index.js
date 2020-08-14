@@ -18,19 +18,19 @@ import { RoutesUrls } from '../configs/RoutesUrls';
 import reducers from './reducers';
 
 axios.interceptors.response.use((response) => {
+
     return response;
 }, (error) => {
     const { status } = error.response;
     const originalRequest = error.config;
-    console.log('test 1');
 
     if ((error.response && status === 401 && originalRequest.url === APIUrls.refreshTokens)) {
-        console.log('test 2');
+
         return deleteTokensAndAuthBearerTokenAndPushLogIn();
     }
 
     if (error.response && status === 401) {
-        console.log('test 3');
+
         return resetTokenAndReattemptRequest(error);
     }
 
@@ -57,7 +57,6 @@ axios.interceptors.response.use((response) => {
         default:
             break;
     }
-    console.log('test 4');
 
     history.push(RoutesUrls.login);
 

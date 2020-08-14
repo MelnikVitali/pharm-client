@@ -20,7 +20,7 @@ import { RoutesUrls } from '../../configs/RoutesUrls';
 
 import useStyles from './styles';
 
-const Navbar = (props) => {
+const Navbar = React.memo((props) => {
     const { window } = props;
     const classes = useStyles();
 
@@ -220,6 +220,6 @@ const Navbar = (props) => {
 
         </header>
     );
-};
+});
 
 export default Navbar;
