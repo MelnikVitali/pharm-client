@@ -23,6 +23,7 @@ axios.interceptors.response.use((response) => {
 }, (error) => {
     const { status } = error.response;
     const originalRequest = error.config;
+    let tokenData = null;
 
     console.log('test 1');
 
@@ -36,12 +37,17 @@ axios.interceptors.response.use((response) => {
         const getTokenStorage = STORAGE.getItem('accessToken');
         console.log('test 3');
         if (getTokenStorage) {
-            const accessTokenExpires = getTokenStorage && STORAGE.jwtDecode(getTokenStorage);
             const currentTime = Date.now() / 1000;
+
+            tokenData = STORAGE.jwtDecode(getTokenStorage);
 
             console.log('test 4');
 
-            if (accessTokenExpires.exp <= currentTime) {
+            console.log('accessTokenExpires.exp', tokenData.exp);
+            console.log('currentTime', currentTime);
+
+
+            if (tokenData.exp <= currentTime) {
                 console.log('isAccessTokenExpiredError');
 
                 return resetTokenAndReattemptRequest(error);

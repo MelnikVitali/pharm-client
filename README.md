@@ -6,7 +6,7 @@ Author:
 -------
 Vitaliy Melnik
 
-Technology used:
+Technologies used:
 ---------------
 - React
 - Redux
