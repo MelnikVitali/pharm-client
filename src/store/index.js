@@ -25,20 +25,28 @@ axios.interceptors.response.use((response) => {
     const { status } = error.response;
     const originalRequest = error.config;
 
+    console.log('test 1');
+
     if ((error.response && status === 401 && originalRequest.url === APIUrls.refreshTokens) ||
         (error.response && status === 401 && originalRequest.url === APIUrls.logout)) {
+        console.log('test 2');
         return deleteTokensAndAuthBearerTokenAndPushLogIn();
     }
 
     if (error.response && status === 401) {
         const getTokenStorage = STORAGE.getItem('accessToken');
-
+        console.log('test 3');
         if (getTokenStorage) {
+            console.log('test 4');
+
+            console.log('isAccessTokenExpiredError', isAccessTokenExpiredError());
             if (isAccessTokenExpiredError()) {
+                console.log('test 5');
                 return resetTokenAndReattemptRequest(error);
             }
 
         } else {
+            console.log('test 6');
             return deleteTokensAndAuthBearerTokenAndPushLogIn();
         }
     }
@@ -66,6 +74,9 @@ axios.interceptors.response.use((response) => {
         default:
             break;
     }
+    console.log('test 6');
+
+    history.push(RoutesUrls.login);
 
     return Promise.reject(error);
 });

@@ -103,7 +103,7 @@ export const resetTokenAndReattemptRequest = async (error) => {
 
         return retryOriginalRequest;
     } catch (err) {
-        history.push(RoutesUrls.logout);
+        history.push(RoutesUrls.login);
 
         return Promise.reject(err);
     }
