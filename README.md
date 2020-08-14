@@ -15,6 +15,8 @@ Technologies used:
 - Material-UI
 - Formik and Yup
 - axios
+- jsonwebtoken
+- js-cookie
 - react-toastify
 - react-router-dom
 - material-ui-dropzone
