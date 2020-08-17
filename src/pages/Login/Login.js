@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
@@ -48,8 +48,6 @@ const Login = React.memo(() => {
     const classes = useStyles();
 
     const dispatch = useDispatch();
-
-    const [ disabledBtn, setDisabledBtn ] = useState(false);
 
     const errorsServer = useSelector(store => store.errorReducer);
     const user = useSelector(store => store.authReducer.user);
@@ -108,9 +106,9 @@ const Login = React.memo(() => {
                 data: { tokenId: response.tokenId },
             });
 
-            await dispatch(socialLogin(res.data));
-
             await dispatch(toggleIsFetching(false));
+
+            return dispatch(socialLogin(res.data));
 
         } catch (err) {
             await dispatch(toggleIsFetching(false));
@@ -125,8 +123,6 @@ const Login = React.memo(() => {
 
     const responseFacebook = async (response) => {
         try {
-            setDisabledBtn(true);
-
             await dispatch(toggleIsFetching(true));
 
             const res = await axios({
@@ -138,17 +134,11 @@ const Login = React.memo(() => {
                 },
             });
 
-            if (res) {
-                setDisabledBtn(false);
-
-                await dispatch(socialLogin(res.data));
-            }
-
             await dispatch(toggleIsFetching(false));
 
-        } catch (err) {
-            setDisabledBtn(false);
+            return dispatch(socialLogin(res.data));
 
+        } catch (err) {
             await dispatch(toggleIsFetching(false));
 
             return dispatch({
@@ -255,7 +245,6 @@ const Login = React.memo(() => {
                         </Grid>
                         <Grid item xs={6} sm={6}>
                             <FacebookLogin
-                                disabled={disabledBtn}
                                 appId={socialAuth.REACT_APP_FACEBOOK_APP_ID}
                                 autoLoad={false}
                                 fields="name,email,picture"
