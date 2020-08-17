@@ -26,7 +26,7 @@ axios.interceptors.response.use((response) => {
 
     if ((error.response && status === 401 && originalRequest.url === APIUrls.refreshTokens)) {
 
-        return deleteTokensAndAuthBearerTokenAndPushLogIn();
+        return history.push(RoutesUrls.logout);
     }
 
     if (error.response && status === 401) {
