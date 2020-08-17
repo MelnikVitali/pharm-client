@@ -4,7 +4,7 @@ export const RoutesUrls = {
     register: '/register',
     login: '/login',
     logout: '/logout',
-    fileUpload: '/file-upload',
+    fileUpload: '/content',
     images: '/pictures',
     homePage: '/',
     addPost: '/add',

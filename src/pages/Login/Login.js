@@ -104,7 +104,7 @@ const Login = React.memo(() => {
 
             const res = await axios({
                 method: "POST",
-                url: APIUrls.googleLogin, //Link to https://console.cloud.google.com/apis/credentials/
+                url: APIUrls.googleLogin, //See settings in https://console.cloud.google.com/apis/credentials/
                 data: { tokenId: response.tokenId },
             });
 
@@ -126,11 +126,12 @@ const Login = React.memo(() => {
     const responseFacebook = async (response) => {
         try {
             setDisabledBtn(true);
+
             await dispatch(toggleIsFetching(true));
 
             const res = await axios({
                 method: "POST",
-                url: APIUrls.facebookLogin, //Link to https://developers.facebook.com/
+                url: APIUrls.facebookLogin, //See settings in https://developers.facebook.com/
                 data: {
                     accessToken: response.accessToken,
                     userID: response.userID
@@ -139,9 +140,9 @@ const Login = React.memo(() => {
 
             if (res) {
                 setDisabledBtn(false);
-            }
 
-            await dispatch(socialLogin(res.data));
+                await dispatch(socialLogin(res.data));
+            }
 
             await dispatch(toggleIsFetching(false));
 

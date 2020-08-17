@@ -1,24 +1,23 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Helmet from 'react-helmet';
-import axios from 'axios';
 
 import { DropzoneDialog } from 'material-ui-dropzone'
 import { Button, Typography, Container, Box } from '@material-ui/core';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 
-import { toggleIsFetching } from '../../store/actions/toggleIsFetchingActions';
 import STORAGE from '../../helpers/storage';
 
 import Preloader from '../../components/Preloader';
 import Navbar from '../../components/Navbar';
 import Copyright from '../../components/Copyright';
 
-import { APIUrls } from '../../configs/APIUrls';
 import { history } from '../../helpers/history';
 import { RoutesUrls } from '../../configs/RoutesUrls';
+
+import { openDropzone, closeDropzone, savingFiles, clearAlert } from '../../store/actions/fileUploadAction';
 
 import useStyles from './styles';
 
@@ -33,16 +32,6 @@ const acceptedFiles = [
     'application/msword',
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ];
 
-const initialState = {
-    open: false,
-    files: [],
-    serverError: '',
-    serverResponse: false,
-    saved: '',
-    rejected: '',
-    reason: 'All files with such names already exist!'
-};
-
 const FileUploader = React.memo(() => {
     const classes = useStyles();
 
@@ -50,69 +39,29 @@ const FileUploader = React.memo(() => {
 
     const isFetching = useSelector(store => store.toggleIsFetchingReducer.isFetching);
 
-    const [ state, setState ] = useState(initialState);
+    const stateUpload = useSelector(store => store.fileUploadReducer);
 
     const storageToken = STORAGE.getItem('accessToken');
 
     useEffect(() => {
+        dispatch(clearAlert());
+
         if (!storageToken) {
             history.push(RoutesUrls.login);
         }
     }, []);
 
     const handleOpen = () => {
-        setState({
-            ...initialState,
-            open: true
-        });
+        dispatch(openDropzone());
     };
 
     const handleClose = () => {
-        setState({
-            ...state,
-            open: false
-        });
+        dispatch(closeDropzone());
     };
 
-    const handleSave = async files => {
-        const config = { headers: { 'Content-Type': 'multipart/form-data' } };
-        let fd = new FormData();
-
-        files.forEach(file => fd.append('myFiles', file));
-
-        try {
-            await dispatch(toggleIsFetching(true));
-
-            const res = await axios.post(`${APIUrls.fileUpload}`, fd, config);
-
-            if (res) {
-                dispatch(toggleIsFetching(false));
-            }
-
-            const resReject = res.data.rejected && res.data.rejected.map(file => file.fileName);
-            const resSave = res.data.saved && res.data.saved.map(file => file.name);
-
-            return setState({
-                ...state,
-                open: false,
-                saved: (resSave && resSave.join(', ')) || '',
-                rejected: (resReject && resReject.join(', ')) || '',
-                reason: 'A file with the same name already exists!',
-                serverResponse: true
-            });
-        } catch (error) {
-            dispatch(toggleIsFetching(false));
-
-            if (error && error.response && error.response.data) {
-                return setState({
-                    ...state,
-                    open: false,
-                    serverError: error.response.data.error || 'Something went wrong!'
-                });
-            }
-        }
-    };
-
+    const handleSave = (files) => {
+        dispatch(savingFiles(files));
+    }
     return (
         <>
             {isFetching ? <Preloader /> : null}
@@ -139,7 +88,7 @@ const FileUploader = React.memo(() => {
                 </Box>
 
                 <DropzoneDialog
-                    open={state.open}
+                    open={stateUpload.open}
                     onSave={handleSave}
                     filesLimit={4}
                     acceptedFiles={acceptedFiles}
@@ -147,31 +96,32 @@ const FileUploader = React.memo(() => {
                     maxFileSize={3000000}
                     onClose={handleClose}
                     showFileNames={true}
+                    showAlerts={true}
                     showFileNamesInPreview={true}
                     dialogTitle={'Upload image and file'}
                     dropzoneText={'Drag and drop a file  and image here or click'}
                 />
 
-                {(state.serverError !== '')
+                {(stateUpload.serverError)
                     ? <div className={classes.root}>
                         <Alert severity="error">
                             <AlertTitle>Error</AlertTitle>
-                            Server error — <strong>{state.serverError}</strong>
+                            Server error — <strong>{stateUpload.serverError}</strong>
                         </Alert>
                     </div>
                     : null
                 }
 
-                {(state.serverResponse)
+                {(stateUpload.serverResponse)
                     ? <div className={classes.root}>
                         <Alert severity="success">
                             <AlertTitle>Success</AlertTitle>
-                            <p><strong>Saved files — </strong>{state.saved}</p>
+                            <p><strong>Saved files — </strong>{stateUpload.saved}</p>
 
-                            {(state.rejected !== '')
+                            {(stateUpload.rejected !== '')
                                 ? <>
-                                    <p><strong>Rejected files — </strong>{state.rejected}</p>
-                                    <p><strong>Reason for rejection — </strong>{state.reason}</p>
+                                    <p><strong>Rejected files — </strong>{stateUpload.rejected}</p>
+                                    <p><strong>Reason for rejection — </strong>{stateUpload.reason}</p>
                                 </>
                                 : null
                             }

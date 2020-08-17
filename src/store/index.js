@@ -58,8 +58,6 @@ axios.interceptors.response.use((response) => {
             break;
     }
 
-    history.push(RoutesUrls.login);
-
     return Promise.reject(error);
 });
 

@@ -1,5 +1,6 @@
 {
   "name": "pharm-client",
+  "author": "Vitaliy Melnik",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -15,7 +16,7 @@
     "formik": "^2.1.4",
     "js-cookie": "^2.2.1",
     "jsonwebtoken": "^8.5.1",
-    "material-ui-dropzone": "^3.3.0",
+    "material-ui-dropzone": "^3.3.1",
     "query-string": "^6.13.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
