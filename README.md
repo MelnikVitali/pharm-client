@@ -28,8 +28,9 @@ Technologies used:
 
 Proxy for backend:
 ------------------
-- file ==> /src/setupProxy.js
+- file   ==>  /src/setupProxy.js
 -----------------
+```
 const { createProxyMiddleware } = require('http-proxy-middleware');
 
 module.exports = function(app) {
@@ -44,6 +45,7 @@ module.exports = function(app) {
         })
     );
 };
+```
 ------------------------------------   
 
 This project bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
