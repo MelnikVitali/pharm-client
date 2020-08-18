@@ -6,10 +6,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import {
-    resetTokenAndReattemptRequest,
-    deleteTokensAndAuthBearerTokenAndPushLogIn
-} from '../helpers/authorization';
+import { resetTokenAndReattemptRequest } from '../helpers/authorization';
 import { history } from '../helpers/history';
 
 import { APIUrls } from '../configs/APIUrls';
