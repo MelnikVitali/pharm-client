@@ -79,7 +79,7 @@ export const resetTokenAndReattemptRequest = async (error) => {
 
         return retryOriginalRequest;
     } catch (err) {
-        history.push(RoutesUrls.login);
+        deleteTokensAndAuthBearerTokenAndPushLogIn();
 
         return Promise.reject(err);
     }

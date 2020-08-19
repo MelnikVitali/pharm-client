@@ -197,7 +197,7 @@ export const logoutUser = (userIdData) => async dispatch => {
         return dispatch(setCurrentUser(null));
 
     } catch (err) {
-        dispatch(toggleIsFetching(false));
+        await dispatch(toggleIsFetching(false));
 
         return deleteTokensAndAuthBearerTokenAndPushLogIn();
     }

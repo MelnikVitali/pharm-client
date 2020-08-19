@@ -6,7 +6,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { resetTokenAndReattemptRequest } from '../helpers/authorization';
+import { deleteTokensAndAuthBearerTokenAndPushLogIn, resetTokenAndReattemptRequest } from '../helpers/authorization';
 import { history } from '../helpers/history';
 
 import { APIUrls } from '../configs/APIUrls';
@@ -24,6 +24,11 @@ axios.interceptors.response.use((response) => {
     if ((error.response && status === 401 && originalRequest.url === APIUrls.refreshTokens)) {
 
         return history.push(RoutesUrls.logout);
+    }
+
+    if ((error.response && status === 401 && originalRequest.url === APIUrls.logout)) {
+
+        return deleteTokensAndAuthBearerTokenAndPushLogIn();
     }
 
     if (error.response && status === 401) {
