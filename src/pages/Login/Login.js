@@ -29,7 +29,6 @@ import { socialLogin } from '../../store/actions/authActions';
 
 import { APIUrls } from '../../configs/APIUrls';
 import { RoutesUrls } from '../../configs/RoutesUrls';
-import { socialAuth } from '../../configs/socialAuth';
 
 import { history } from '../../helpers/history';
 import STORAGE from '../../helpers/storage';
@@ -236,7 +235,7 @@ const Login = React.memo(() => {
                     <Grid container justify='space-between' spacing={2} className={classes.gridRoot}>
                         <Grid item xs={6} sm={6}>
                             <GoogleLogin
-                                clientId={socialAuth.REACT_APP_GOOGLE_CLIENT_ID}
+                                clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
                                 buttonText="Google Log in"
                                 onSuccess={responseSuccessGoogle}
                                 className={classes.google}
@@ -244,7 +243,7 @@ const Login = React.memo(() => {
                         </Grid>
                         <Grid item xs={6} sm={6}>
                             <FacebookLogin
-                                appId={socialAuth.REACT_APP_FACEBOOK_APP_ID}
+                                appId={process.env.REACT_APP_FACEBOOK_APP_ID}
                                 autoLoad={false}
                                 fields="name,email,picture"
                                 scope="public_profile,email"
