@@ -239,6 +239,7 @@ const Login = React.memo(() => {
                                 buttonText="Google Log in"
                                 onSuccess={responseSuccessGoogle}
                                 className={classes.google}
+                                cookiePolicy={'single_host_origin'}
                             />
                         </Grid>
                         <Grid item xs={6} sm={6}>
