@@ -5,6 +5,10 @@ import Helmet from 'react-helmet';
 
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
+import useScrollTrigger from '@material-ui/core/useScrollTrigger';
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import Zoom from '@material-ui/core/Zoom';
+import Fab from '@material-ui/core/Fab';
 
 import Post from '../../components/Post';
 import Preloader from '../../components/Preloader';
@@ -21,7 +25,33 @@ import { RoutesUrls } from '../../configs/RoutesUrls';
 
 import useStyles from './style';
 
-const Posts = React.memo(() => {
+function ScrollTop(props) {
+    const { children, window } = props;
+    const classes = useStyles();
+    const trigger = useScrollTrigger({
+        target: window ? window() : undefined,
+        disableHysteresis: true,
+        threshold: 100,
+    });
+
+    const handleClick = (event) => {
+        const anchor = (event.target.ownerDocument || document).querySelector('#back-to-top-anchor');
+
+        if (anchor) {
+            anchor.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    };
+
+    return (
+        <Zoom in={trigger}>
+            <div onClick={handleClick} role="presentation" className={classes.zoom}>
+                {children}
+            </div>
+        </Zoom>
+    );
+}
+
+const Posts = React.memo((props) => {
     const classes = useStyles();
     const dispatch = useDispatch();
 
@@ -46,7 +76,7 @@ const Posts = React.memo(() => {
                 <title>Главная страница</title>
             </Helmet>
 
-            <Container component='section' maxWidth='lg' className={classes.root}>
+            <Container component='section' maxWidth='lg' className={classes.root} >
                 <Typography variant="h4" align='center'>
                     Статьи
                 </Typography>
@@ -59,7 +89,11 @@ const Posts = React.memo(() => {
                         Нет ни одного поста
                     </Typography>}
             </Container>
-
+            <ScrollTop {...props}>
+                <Fab color="secondary" size="small" aria-label="scroll back to top">
+                    <KeyboardArrowUpIcon />
+                </Fab>
+            </ScrollTop>
             <Copyright />
         </>
     );

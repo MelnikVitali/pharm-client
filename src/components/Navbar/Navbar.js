@@ -141,7 +141,7 @@ const Navbar = (props) => {
                 position="static"
                 className={classes.appBar}
             >
-                <Toolbar className={classes.toolBar}>
+                <Toolbar className={classes.toolBar} id="back-to-top-anchor">
                     <Hidden mdUp>
                         <IconButton
                             color="inherit"

@@ -10,6 +10,11 @@ const useStyles = makeStyles((theme) => ({
     marginTop: {
         marginTop: theme.spacing(12)
     },
+    zoom:{
+        position: 'fixed',
+        bottom: theme.spacing(4),
+        right: theme.spacing(2),
+    },
 }));
 
 export default useStyles;
