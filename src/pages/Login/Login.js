@@ -235,7 +235,7 @@ const Login = React.memo(() => {
                     <Grid container justify='space-between' spacing={2} className={classes.gridRoot}>
                         <Grid item xs={6} sm={6}>
                             <GoogleLogin
-                                clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+                                clientId={`${process.env.REACT_APP_GOOGLE_CLIENT_ID}`}
                                 buttonText="Google Log in"
                                 onSuccess={responseSuccessGoogle}
                                 className={classes.google}
