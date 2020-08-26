@@ -2,7 +2,6 @@
 
 .idea
 *.log
-.env.local
 .package-lock.json
 
 # dependencies
