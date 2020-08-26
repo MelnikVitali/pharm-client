@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { Router } from 'react-router-dom';
 import { ToastContainer } from "react-toastify";
-import dotenv from 'dotenv';
 
 import 'typeface-roboto';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -17,8 +16,6 @@ import { setAuthBearerToken } from './helpers/authorization';
 import store from './store';
 
 import App from "./App";
-
-dotenv.config();
 
 const storageToken = STORAGE.getItem('accessToken');
 
