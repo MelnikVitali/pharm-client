@@ -29,7 +29,6 @@ import { socialLogin } from '../../store/actions/authActions';
 
 import { APIUrls } from '../../configs/APIUrls';
 import { RoutesUrls } from '../../configs/RoutesUrls';
-import { socialAuth } from '../../configs/socialAuth';
 
 import { history } from '../../helpers/history';
 import STORAGE from '../../helpers/storage';
