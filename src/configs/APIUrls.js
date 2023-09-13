@@ -1,5 +1,5 @@
 export const APIUrls = {
-    baseGetImage: 'https://pharm-backend.herokuapp.com/images',
+    baseGetImage: 'https://pharm-server.vercel.app/images',
     register: '/api/register',
     login: '/api/login',
     logout: '/api/logout',
