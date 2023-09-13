@@ -1,12 +1,12 @@
 {
-  "root": "build/",
-  "routes": {
-    "/**": "index.html"
-  },
-  "https_only": true,
-  "proxies": {
-    "/api/": {
-      "origin": "http://localhost:5000"
+    "root": "build/",
+    "routes": {
+        "/**": "index.html"
+    },
+    "https_only": true,
+    "proxies": {
+        "/api/": {
+            "origin": "https://pharm-backend-navy.vercel.app"
+        }
     }
-  }
 }
