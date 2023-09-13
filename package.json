@@ -61,6 +61,7 @@
         ]
     },
     "devDependencies": {
+        "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
         "http-proxy-middleware": "^1.0.5",
         "node-polyfill-webpack-plugin": "^2.0.1"
     }
