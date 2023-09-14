@@ -2,6 +2,8 @@
 
 Final project DAN.IT "Pharm-client"
 
+[Deployed App on Vercel](https://pharm-client.vercel.app/)
+
 ## Author:
 
 Vitaliy Melnik
