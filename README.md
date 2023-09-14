@@ -26,28 +26,6 @@ Technologies used:
 - react-helmet
 - clsx
 
-Proxy for backend:
-------------------
-- file   ==>  /src/setupProxy.js
------------------
-```
-const { createProxyMiddleware } = require('http-proxy-middleware');
-
-module.exports = function(app) {
-    app.use(
-        '/api/**',
-        createProxyMiddleware({
-            target: 'http://localhost:5000',
-            changeOrigin: true,
-            pathRewrite: {
-                "^/api": "/", // rewrite path
-            },
-        })
-    );
-};
-```
-------------------------------------   
-
 This project bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

@@ -1,19 +1,21 @@
+const API_URL = (process.env.NODE_ENV === "production") ? process.env.REACT_APP_baseURL : 'http://localhost:5000';
+
 export const APIUrls = {
-    baseGetImage: 'https://pharm-server.vercel.app/images',
-    register: '/api/register',
-    login: '/api/login',
-    logout: '/api/logout',
-    fileUpload: '/api/content',
-    images: '/api/pictures',
-    addPost: '/api/add',
-    editPost: '/api/edit',
-    post: '/api/post',
-    posts: '/api/posts',
-    refreshTokens: '/api/refresh-tokens',
-    forgotPassword: '/api/forgot-password',
-    resetPassword: '/api/reset-password',
-    emailActivation: '/api/email-activation',
-    repeatEmailActivation: '/api/repeat-email',
-    googleLogin: '/api/google-login',
-    facebookLogin: '/api/facebook-login'
+    baseGetImage: `${API_URL}/images`,
+    register: `${API_URL}/register`,
+    login: `${API_URL}/login`,
+    logout: `${API_URL}/logout`,
+    fileUpload: `${API_URL}/content`,
+    images: `${API_URL}/pictures`,
+    addPost: `${API_URL}/add`,
+    editPost: `${API_URL}/edit`,
+    post: `${API_URL}/post`,
+    posts: `${API_URL}/posts`,
+    refreshTokens: `${API_URL}/refresh-tokens`,
+    forgotPassword: `${API_URL}/forgot-password`,
+    resetPassword: `${API_URL}/reset-password`,
+    emailActivation: `${API_URL}/email-activation`,
+    repeatEmailActivation: `${API_URL}/repeat-email`,
+    googleLogin: `${API_URL}/google-login`,
+    facebookLogin: `${API_URL}/facebook-login`
 };

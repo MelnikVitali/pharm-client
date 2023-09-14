@@ -1,6 +1,4 @@
 export const RoutesUrls = {
-    baseURL: 'http://localhost:5000',
-    baseGetImage: 'http://localhost:5000/images',
     register: '/register',
     login: '/login',
     logout: '/logout',
