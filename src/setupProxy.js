@@ -5,7 +5,7 @@ module.exports = function (app) {
         '/api/**',
         createProxyMiddleware({
             // target: (process.env.NODE_ENV !== "production") ? 'http://localhost:5000' : 'https://pharm-backend-navy.vercel.app',
-            target: 'http://localhost:5000',
+            target: 'https://pharm-backend-navy.vercel.app',
             changeOrigin: true,
             pathRewrite: {
                 "^/api": "/", // rewrite path
