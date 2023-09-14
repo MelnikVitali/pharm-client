@@ -1,4 +1,4 @@
-const API_URL = (process.env.NODE_ENV === "production") ? process.env.REACT_APP_baseURL : 'http://localhost:5000';
+const API_URL = (process.env.NODE_ENV === "production") ? 'https://pharm-backend-navy.vercel.app' : 'http://localhost:5000';
 
 export const APIUrls = {
     baseGetImage: `${API_URL}/images`,
