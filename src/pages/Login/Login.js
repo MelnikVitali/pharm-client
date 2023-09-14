@@ -6,7 +6,6 @@ import * as Yup from 'yup';
 import axios from 'axios';
 
 import GoogleLogin from 'react-google-login';
-import FacebookLogin from 'react-facebook-login';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -18,7 +17,6 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import IconButton from '@material-ui/core/IconButton';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import FacebookIcon from '@material-ui/icons/Facebook';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
 import { Alert } from '@material-ui/lab';
@@ -59,7 +57,7 @@ const Login = React.memo(() => {
 
         if (user && storageToken) {
             history.push(RoutesUrls.homePage);
-        }
+                }
     }, [ storageToken, user, dispatch ]);
 
     const {
@@ -232,26 +230,14 @@ const Login = React.memo(() => {
                         or
                     </Typography>
 
-                    <Grid container justify='space-between' spacing={2} className={classes.gridRoot}>
-                        <Grid item xs={6} sm={6}>
+                    <Grid container justifyContent='space-between' spacing={2} className={classes.gridRoot}>
+                        <Grid item xs={12} sm={12}>
                             <GoogleLogin
                                 clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
                                 buttonText="Google Log in"
                                 onSuccess={responseSuccessGoogle}
                                 cookiePolicy={'single_host_origin'}
                                 className={classes.google}
-                            />
-                        </Grid>
-                        <Grid item xs={6} sm={6}>
-                            <FacebookLogin
-                                appId={process.env.REACT_APP_FACEBOOK_APP_ID}
-                                autoLoad={false}
-                                fields="name,email,picture"
-                                scope="public_profile,email"
-                                callback={responseFacebook}
-                                cssClass={classes.facebookBtn}
-                                textButton={<span>Facebook Log in</span>}
-                                icon={< FacebookIcon />}
                             />
                         </Grid>
                     </Grid>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink as Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import clsx from 'clsx';
@@ -15,10 +15,15 @@ import MenuIcon from '@material-ui/icons/Menu';
 import DescriptionIcon from '@material-ui/icons/Description';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import PermMediaIcon from '@material-ui/icons/PermMedia';
+import STORAGE from '../../helpers/storage';
 
 import { RoutesUrls } from '../../configs/RoutesUrls';
 
 import useStyles from './styles';
+
+const storageToken = STORAGE.getItem('accessToken');
+
+
 
 const Navbar = (props) => {
     const { window } = props;
@@ -27,6 +32,8 @@ const Navbar = (props) => {
     const user = useSelector(state => state.authReducer.user);
 
     const [ drawerOpen, setDrawerOpen ] = useState(false);
+
+    const storageToken = STORAGE.getItem('accessToken');
 
     const toggleDrawer = (open) => (event) => {
         if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -94,7 +101,7 @@ const Navbar = (props) => {
     const registeredUserNavLinks = (
         <>
             <ListItem>
-                {user
+                {user && storageToken
                     ? <Avatar className={classes.orange}>{user.name.substring(0, 1).toUpperCase()}</Avatar>
                     : <Avatar src="/broken-image.jpg" />
                 }
@@ -193,7 +200,7 @@ const Navbar = (props) => {
                         </List>
                     </Hidden>
 
-                    {user
+                    {user && storageToken
                         ? <List component='ul' className={classes.nawAuthMenu}>{registeredUserNavLinks}</List>
                         : <List component='ul' className={classes.nawAuthMenu}>{notRegisteredUserNavLinks}</List>
                     }

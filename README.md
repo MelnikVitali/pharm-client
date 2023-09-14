@@ -1,30 +1,29 @@
-Project:
---------
+## Project:
+
 Final project DAN.IT "Pharm-client"
 
-Author:
--------
+## Author:
+
 Vitaliy Melnik
 
-Technologies used:
----------------
-- React
-- Redux
-- Redux-thunk
-- React and Redux Hooks
-- Material-UI
-- Formik and Yup
-- axios
-- jsonwebtoken
-- js-cookie
-- react-toastify
-- react-router-dom
-- material-ui-dropzone
-- query-string
-- react-facebook-login
-- react-google-login
-- react-helmet
-- clsx
+## Technologies used:
+
+-   React
+-   Redux
+-   Redux-thunk
+-   React and Redux Hooks
+-   Material-UI
+-   Formik and Yup
+-   axios
+-   jsonwebtoken
+-   js-cookie
+-   react-toastify
+-   react-router-dom
+-   material-ui-dropzone
+-   query-string
+-   react-google-login
+-   react-helmet
+-   clsx
 
 This project bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

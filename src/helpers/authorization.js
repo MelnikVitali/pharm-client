@@ -46,6 +46,8 @@ export const resetTokenAndReattemptRequest = async (error) => {
         if (!getRefreshTokenCookie) {
             deleteTokensAndAuthBearerTokenAndPushLogIn();
 
+            console.log('!getRefreshTokenCookie')
+
             return Promise.reject(error);
         }
 

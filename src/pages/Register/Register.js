@@ -240,7 +240,7 @@ const Register = React.memo(() => {
                         >
                             Sign Up
                         </Button>
-                        <Grid container justify="flex-end">
+                        <Grid container justifyContent="flex-end">
                             <Grid
                                 component={Link}
                                 to={RoutesUrls.login}
