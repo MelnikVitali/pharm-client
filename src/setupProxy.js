@@ -1,10 +1,10 @@
 const { createProxyMiddleware } = require('http-proxy-middleware');
 
-module.exports = function(app) {
+module.exports = function (app) {
     app.use(
         '/api/**',
         createProxyMiddleware({
-            target: 'http://localhost:5000',
+            target: (process.env.NODE_ENV !== "production") ? 'http://localhost:5000' : 'https://pharm-backend-navy.vercel.app/',
             changeOrigin: true,
             pathRewrite: {
                 "^/api": "/", // rewrite path
