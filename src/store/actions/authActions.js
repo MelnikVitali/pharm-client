@@ -9,6 +9,14 @@ import { APIUrls } from '../../configs/APIUrls';
 
 import { toggleIsFetching } from './toggleIsFetchingActions';
 
+const axiosConfig = {
+    withCredentials: true,
+    cors: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "Content-Type"
+    }
+};
+
 export const socialLogin = (loginData) => async dispatch => {
     try {
 
@@ -27,13 +35,13 @@ export const socialLogin = (loginData) => async dispatch => {
             payload: err.response.data
         });
     }
-}
+};
 
 export const loginUser = (loginData) => async dispatch => {
     try {
         await dispatch(toggleIsFetching(true));
 
-        const res = await axios.post(APIUrls.login, loginData);
+        const res = await axios.post(APIUrls.login, loginData, axiosConfig);
 
         await dispatch(toggleIsFetching(false));
 
@@ -66,7 +74,7 @@ export const forgotPassword = (forgotData) => async dispatch => {
     try {
         await dispatch(toggleIsFetching(true));
 
-        const res = await axios.put(APIUrls.forgotPassword, forgotData);
+        const res = await axios.put(APIUrls.forgotPassword, forgotData, axiosConfig);
 
         if (res) {
             dispatch(toggleIsFetching(false));
@@ -91,7 +99,7 @@ export const resetPassword = (resetData) => async dispatch => {
     try {
         await dispatch(toggleIsFetching(true));
 
-        const res = await axios.put(APIUrls.resetPassword, resetData);
+        const res = await axios.put(APIUrls.resetPassword, resetData, axiosConfig);
 
         await dispatch(toggleIsFetching(false));
 
@@ -114,7 +122,7 @@ export const registerUser = registerData => async dispatch => {
     try {
         await dispatch(toggleIsFetching(true));
 
-        const res = await axios.post(APIUrls.register, registerData);
+        const res = await axios.post(APIUrls.register, registerData, axiosConfig);
 
         await dispatch(toggleIsFetching(false));
 
@@ -136,7 +144,7 @@ export const confirmEmail = (tokenData) => async dispatch => {
     try {
         dispatch(toggleIsFetching(true));
 
-        const res = await axios.post(APIUrls.emailActivation, tokenData);
+        const res = await axios.post(APIUrls.emailActivation, tokenData, axiosConfig);
 
         if (res) {
             dispatch(toggleIsFetching(false));
@@ -161,7 +169,7 @@ export const repeatEmailActivation = (token, email) => async dispatch => {
     try {
         dispatch(toggleIsFetching(true));
 
-        const res = await axios.post(APIUrls.repeatEmailActivation, token, email);
+        const res = await axios.post(APIUrls.repeatEmailActivation, token, email, axiosConfig);
 
         if (res) {
             dispatch(toggleIsFetching(false));
@@ -186,7 +194,7 @@ export const logoutUser = (userIdData) => async dispatch => {
     try {
         dispatch(toggleIsFetching(true));
 
-        const res = await axios.post(APIUrls.logout, userIdData);
+        const res = await axios.post(APIUrls.logout, userIdData, axiosConfig);
 
         if (res) {
             dispatch(toggleIsFetching(false));
@@ -208,5 +216,5 @@ export const setCurrentUser = decoded => {
     return {
         type: actions.SET_CURRENT_USER,
         payload: decoded
-    }
+    };
 };

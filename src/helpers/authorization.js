@@ -46,8 +46,6 @@ export const resetTokenAndReattemptRequest = async (error) => {
         if (!getRefreshTokenCookie) {
             deleteTokensAndAuthBearerTokenAndPushLogIn();
 
-            console.log('!getRefreshTokenCookie')
-
             return Promise.reject(error);
         }
 
@@ -64,8 +62,9 @@ export const resetTokenAndReattemptRequest = async (error) => {
 
             const response = await axios({
                 method: 'post',
-                url: APIUrls.refreshTokens
-            })
+                url: APIUrls.refreshTokens,
+                withCredentials: true
+            });
 
             if (!response.data) {
                 return Promise.reject(error);
@@ -85,4 +84,4 @@ export const resetTokenAndReattemptRequest = async (error) => {
 
         return Promise.reject(err);
     }
-}
+};

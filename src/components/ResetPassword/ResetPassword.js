@@ -64,7 +64,7 @@ const ResetPassword = React.memo((props) => {
                 .min(6, 'Пароль должен состоять не менее чем из 6 символов')
                 .required('Укажите пароль'),
             confirmPassword: Yup.string()
-                .oneOf([ Yup.ref('password'), null ], 'Пароли не совпадают')
+                .oneOf([Yup.ref('password'), null], 'Пароли не совпадают')
                 .required('Повторите пароль')
         }),
         onSubmit: fields => dispatch(resetPassword({
@@ -80,7 +80,6 @@ const ResetPassword = React.memo((props) => {
 
     const handleClickShowPassword = () => {
         setValues({ ...values, showPassword: !values.showPassword });
-        console.log(values.showPassword);
     };
 
     const handleClickShowConfirmPassword = () => {

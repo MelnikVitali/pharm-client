@@ -69,7 +69,7 @@ const Register = React.memo(() => {
                 .min(6, 'Пароль должен состоять не менее чем из 6 символов')
                 .required('Укажите пароль'),
             confirmPassword: Yup.string()
-                .oneOf([ Yup.ref('password'), null ], 'Пароли не совпадают')
+                .oneOf([Yup.ref('password'), null], 'Пароли не совпадают')
                 .required('Повторите пароль')
         }),
         onSubmit: fields => dispatch(registerUser(fields))
@@ -82,7 +82,6 @@ const Register = React.memo(() => {
 
     const handleClickShowPassword = () => {
         setValues({ ...values, showPassword: !values.showPassword });
-        console.log(values.showPassword);
     };
 
     const handleClickShowConfirmPassword = () => {
@@ -187,8 +186,8 @@ const Register = React.memo(() => {
 
                         <TextField
                             error={touched.confirmPassword &&
-                            (Boolean(errors.confirmPassword) ||
-                                Boolean(errorsServer.confirmPassword))}
+                                (Boolean(errors.confirmPassword) ||
+                                    Boolean(errorsServer.confirmPassword))}
                             variant="outlined"
                             margin="normal"
                             required

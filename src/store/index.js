@@ -41,7 +41,7 @@ axios.interceptors.response.use((response) => {
             toast.error('Ошибка сервера - проверьте терминал для получения дополнительной информации!');
             break;
         case 504: toast.error
-           ('Ошибка сервера - проверьте терминал для получения дополнительной информации!');
+            ('Ошибка сервера - проверьте терминал для получения дополнительной информации!');
             break;
 
         case 429:
@@ -66,5 +66,5 @@ axios.interceptors.response.use((response) => {
 // Create store
 export default createStore(reducers, composeWithDevTools(
     applyMiddleware(thunk)
-    ),
+),
 );
