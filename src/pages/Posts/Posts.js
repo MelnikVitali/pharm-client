@@ -83,11 +83,12 @@ const Posts = React.memo((props) => {
 
                 {(posts && posts.length > 0)
                     ? posts.map(post => {
-                        return <Post key={post._id} post={post} />
+                        return <Post key={post._id} post={post} />;
                     })
-                    : <Typography variant="h2" gutterBottom align='center' className={classes.marginTop}>
-                        Нет ни одного поста
-                    </Typography>}
+                    : null}
+                {!isFetching && !posts && (<Typography variant="h2" gutterBottom align='center' className={classes.marginTop}>
+                    Нет ни одного поста
+                </Typography>)}
             </Container>
             <ScrollTop {...props}>
                 <Fab color="secondary" size="small" aria-label="scroll back to top">

@@ -57,8 +57,8 @@ const Login = React.memo(() => {
 
         if (user && storageToken) {
             history.push(RoutesUrls.homePage);
-                }
-    }, [ storageToken, user, dispatch ]);
+        }
+    }, [storageToken, user, dispatch]);
 
     const {
         handleSubmit, handleChange,
@@ -105,14 +105,14 @@ const Login = React.memo(() => {
 
             await dispatch(toggleIsFetching(false));
 
-            return dispatch(socialLogin(res.data));
+            return dispatch(socialLogin(res?.data));
 
         } catch (err) {
             await dispatch(toggleIsFetching(false));
 
             return dispatch({
                 type: actions.ERROR,
-                payload: err.response.data
+                payload: err?.response?.data
             });
         }
 

@@ -46,7 +46,7 @@ const Gallery = React.memo(() => {
     const images = useSelector(store => store.imageReducer.images);
     const isFetching = useSelector(store => store.toggleIsFetchingReducer.isFetching);
 
-    const [ state, setState ] = useState(initialState);
+    const [state, setState] = useState(initialState);
 
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
@@ -71,7 +71,7 @@ const Gallery = React.memo(() => {
             currentImgId: '',
             imageName: ''
         });
-    }
+    };
 
     const handleClickOpen = (img, id, name) => {
         setState({
@@ -152,14 +152,15 @@ const Gallery = React.memo(() => {
                         </Dialog>
                     </div>
                 )
-                : <Typography
-                    variant="h2"
-                    gutterBottom
-                    align='center'
-                    className={classes.subtitle}
-                >
-                    Нет ни одной картинки
-                </Typography>}
+                : null}
+            {!isFetching && !images && (<Typography
+                variant="h2"
+                gutterBottom
+                align='center'
+                className={classes.subtitle}
+            >
+                Нет ни одной картинки
+            </Typography>)}
             <Copyright />
         </>
     );
