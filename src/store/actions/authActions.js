@@ -64,7 +64,7 @@ export const loginUser = (loginData) => async dispatch => {
 
         document.cookie = 'name=Flavio2';
 
-        return console.log('cookie', res.headers.getSetCookie());
+        return console.log('cookie', res);
 
     } catch (err) {
         await dispatch(toggleIsFetching(false));
