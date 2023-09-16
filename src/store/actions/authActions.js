@@ -55,17 +55,12 @@ export const loginUser = (loginData) => async dispatch => {
 
 
 
-        dispatch(setCurrentUser({
+        return dispatch(setCurrentUser({
             userId: decoded.userId,
             deviceId: decoded.deviceId,
             name: decoded.name
 
         }));
-
-        document.cookie = 'name=Flavio2';
-
-        return console.log('cookie', res);
-
     } catch (err) {
         await dispatch(toggleIsFetching(false));
 
