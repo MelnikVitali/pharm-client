@@ -53,19 +53,25 @@ export const loginUser = (loginData) => async dispatch => {
 
         const decoded = STORAGE.jwtDecode(accessToken);
 
-        return dispatch(setCurrentUser({
+
+
+        dispatch(setCurrentUser({
             userId: decoded.userId,
             deviceId: decoded.deviceId,
             name: decoded.name
 
         }));
 
+        document.cookie = 'name=Flavio2';
+
+        return console.log('cookie', res.headers.getSetCookie());
+
     } catch (err) {
         await dispatch(toggleIsFetching(false));
 
         return dispatch({
             type: actions.ERROR,
-            payload: err.response.data
+            payload: err?.response?.data
         });
     }
 };
